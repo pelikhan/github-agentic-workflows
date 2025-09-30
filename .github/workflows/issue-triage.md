@@ -15,3 +15,7 @@ safe-outputs:
 ---
 # Issue Triage
 Summarize issue #${{ github.event.issue.number }} in 3 emojis. Respond in a comment.
+
+```
+${{ needs.activation.outputs.text }}
+```
