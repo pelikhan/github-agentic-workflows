@@ -10,6 +10,7 @@ on:
     - main
     paths:
     - .github/workflows/*.md
+  workflow_dispatch: null
 
 permissions: {}
 
