@@ -67,11 +67,9 @@ on:
 jobs:
   ai:
     steps:
-      - name: AI Inference with GitHub Tools
-        uses: actions/ai-inference
+      - uses: actions/ai-inference
         with:
-          prompt: 'Label issue'
-          enable-github-mcp: true
+          prompt: 'Label current issue.'
 ```
 
 ---
@@ -104,27 +102,52 @@ SWE agents process untrusted data from multiple sources:
 
 ---
 
+# GitHub Agentic Workflows
+
+- Natural Language
+
+- Automated
+
+- Safe
+
+- Useful
+
+---
+
 # GitHub Agentic Workflow
-## Markdown authoring + Plan/Act
 
 ```yaml
 --- # GitHub Actions yml ++
 on:
-  issues:
-    types: [opened, reopened]
+  issues: [created]
 permissions:
-  issues: read
-engine: copilot
+  issues: read # no writes!
 safe-outputs:
-  add-comment:
---- # Prompt template
-# Issue Triage
-Summarize issue #${{ github.event.issue.number }} in 3 emojis. 
-Respond in a comment.
+  add-labels:
+--- # Natural language prompt
+Label current issue.
+```
+---
+
+# Agentic Workflow Compiler
+## GitHub Action yml is "bytecode"
+
+```yaml
+jobs:
+  check_permissions:
+    run: check role
+  agent: needs[check-permissions]
+    permissions: issues: read # no writes!
+    run: copilot "label current issue" --mcp add-labels
+  detection: needs[agent]
+    run: detect malicious outputs
+    permissions: none
+  create-issue: needs[detection]
+    run: add labels
+    permissions: issues: write
 ```
 
 ---
-
 
 # Phases of Agentic Workflows
 
@@ -141,8 +164,8 @@ Respond in a comment.
 
 ---
 
-# Safe Outputs: Secure AI Actions
-## Agent runs with read-only, outputs processed separately
+# Safe Outputs
+## Deterministic actions on sanitized outputs
 
 ```yaml
 ---
@@ -150,38 +173,14 @@ on:
   push:
 permissions:
   contents: read    # Agent: minimal permissions only
-  actions: read     # NO issues: write needed!
-engine: copilot
 safe-outputs:
   create-issue:     # Separate job handles writes
     title-prefix: "[ai] "
-    labels: [automation, ai-generated]
 ---
-# Code Analysis Agent
 Analyze code changes and create an issue with findings.
 ```
 
 **Security:** Agent has zero write access. Safe-outputs job creates issues separately.
-
-**Flow:** Agent Job (read-only) → Sanitized Outputs → Action Job (write permissions)
-
----
-
-# Agentic Workflow Compiler
-## GitHub Action yml is "bytecode"
-
-```yaml
-jobs:
-  check_permissions:
-  agent: needs[check-permissions]
-    permissions: issues: read
-    run: copilot "summarize issue"
-  detection: needs[agent]
-    permissions: none
-  create-issue: needs[detection]
-    permissions: issues: write
-```
-
 
 ---
 
@@ -191,6 +190,12 @@ jobs:
 * OpenAI Codex (experimental)
 * GitHub Copilot CLI (experimental/issues)
 * YOUR OWN ENGINE
+
+```yaml
+engine: claude
+engine: copilot
+  model: gpt5
+```
 
 ---
 
@@ -204,13 +209,11 @@ permissions: read
 network:
   allowed:
     - defaults       # Basic infrastructure
-    - python        # PyPI ecosystem
     - node          # NPM ecosystem
     - "api.github.com"  # Custom domain
 tools:
   web-fetch:
 ---
-# Code Review Agent
 Analyze the PR and fetch documentation from allowed domains only.
 ```
 
