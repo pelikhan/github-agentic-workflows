@@ -125,6 +125,28 @@ Respond in a comment.
 
 ---
 
+# Agentic Engines
+## Choose your AI coding agent
+
+Three engines available:
+
+- **`engine: claude`** (default)
+  - Claude 3.5 Sonnet
+  - Advanced reasoning & coding
+  - Best for complex tasks
+
+- **`engine: codex`**
+  - GitHub Codex
+  - Code understanding
+  - GitHub integration
+
+- **`engine: copilot`**
+  - GitHub Copilot
+  - Fast & efficient
+  - General purpose
+
+---
+
 # Phases of Agentic Workflows
 
 - **Activation** — Authorization
