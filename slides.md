@@ -54,6 +54,8 @@ on:
   push:
     paths:
       - '**.ts'
+      - 'tsconfig.json'
+      - 'package.json'
 
 jobs:
   build:
