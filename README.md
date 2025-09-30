@@ -183,9 +183,9 @@ jobs:
 # Agentic Engines
 
 * Anthropic Claude Code
-* OpenAI Codex
-* GitHub Copilot CLI
-* YOUR OWNER ENGINE
+* OpenAI Codex (experimental)
+* GitHub Copilot CLI (experimental/issues)
+* YOUR OWN ENGINE
 
 ---
 
