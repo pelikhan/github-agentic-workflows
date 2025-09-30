@@ -30,6 +30,9 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Create output directory
+        run: mkdir -p dist
+
       - name: Compile slides
         run: npx @marp-team/marp-cli@latest slides.md -o dist/index.html
 
