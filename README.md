@@ -245,4 +245,5 @@ This repository contains several agentic workflows that demonstrate GitHub Agent
 | [issue-triage](.github/workflows/issue-triage.md) | Issue Triage | Automatically summarizes new or reopened issues using 3 emojis and posts a comment |
 | [package-security-check](.github/workflows/package-security-check.md) | Package Security Deep Research | Conducts comprehensive security analysis of package-lock.json changes in pull requests, researching dependencies for vulnerabilities |
 | [pseudo](.github/workflows/pseudo.md) | Pseudo Language Converter | Transforms issue content into pseudo-code style language when triggered by /pseudo command |
+| [slidify](.github/workflows/slidify.md) | Slidify - Generate Slide from Issue | Transforms issue content into a new Marp slide and adds it to README.md when triggered by /slidify command |
 | [update-workflow-docs](.github/workflows/update-workflow-docs.md) | Agentic Workflow Documentation Updater | Automatically updates README.md with a summary table of all agentic workflows in the repository |
