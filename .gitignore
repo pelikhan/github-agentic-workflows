@@ -164,6 +164,9 @@ coverage/
 tmp/
 temp/
 
+# Generated slides
+slides.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -182,3 +185,6 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Generated presentation files
+slides.html

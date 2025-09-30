@@ -3,22 +3,29 @@
 #   gh aw compile
 # For more information: https://github.com/githubnext/gh-aw/blob/main/.github/instructions/github-agentic-workflows.instructions.md
 
-name: "Issue Triage"
-"on":
+name: "Pseudo Language Converter"
+on:
   issues:
-    types:
-    - opened
-    - reopened
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, edited, reopened]
+  pull_request_review_comment:
+    types: [created, edited]
 
 permissions: {}
 
 concurrency:
-  group: "gh-aw-${{ github.workflow }}-${{ github.event.issue.number }}"
+  group: "gh-aw-${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}"
 
-run-name: "Issue Triage"
+run-name: "Pseudo Language Converter"
 
 jobs:
   check-membership:
+    if: >
+      ((contains(github.event.issue.body, '/pseudo')) || (contains(github.event.comment.body, '/pseudo'))) ||
+      (contains(github.event.pull_request.body, '/pseudo'))
     runs-on: ubuntu-latest
     outputs:
       error_message: ${{ steps.check-membership.outputs.error_message }}
@@ -26,7 +33,7 @@ jobs:
       result: ${{ steps.check-membership.outputs.result }}
       user_permission: ${{ steps.check-membership.outputs.user_permission }}
     steps:
-      - name: Check team membership for workflow
+      - name: Check team membership for command workflow
         id: check-membership
         uses: actions/github-script@v8
         env:
@@ -96,7 +103,9 @@ jobs:
 
   activation:
     needs: check-membership
-    if: needs.check-membership.outputs.is_team_member == 'true'
+    if: >
+      (needs.check-membership.outputs.is_team_member == 'true') && (((contains(github.event.issue.body, '/pseudo')) ||
+      (contains(github.event.comment.body, '/pseudo'))) || (contains(github.event.pull_request.body, '/pseudo')))
     runs-on: ubuntu-latest
     outputs:
       text: ${{ steps.compute-text.outputs.text }}
@@ -260,16 +269,19 @@ jobs:
       (github.event.pull_request.head.repo.full_name == github.repository)
     runs-on: ubuntu-latest
     permissions:
+      actions: write  # Required for github.rest.actions.cancelWorkflowRun()
       issues: write
       pull-requests: write
+      contents: read
     outputs:
       reaction_id: ${{ steps.react.outputs.reaction-id }}
     steps:
-      - name: Add eyes reaction to the triggering item
+      - name: Add rocket reaction to the triggering item
         id: react
         uses: actions/github-script@v8
         env:
-          GITHUB_AW_REACTION: eyes
+          GITHUB_AW_REACTION: rocket
+          GITHUB_AW_COMMAND: pseudo
         with:
           script: |
             async function main() {
@@ -1065,12 +1077,29 @@ jobs:
         run: |
           mkdir -p $(dirname "$GITHUB_AW_PROMPT")
           cat > $GITHUB_AW_PROMPT << 'EOF'
-          # Issue Triage
-          Summarize issue #${{ github.event.issue.number }} in 3 emojis. Respond in a comment.
+          # Pseudo Language Converter
+          
+          Transform the issue content to pseudo language. Pseudo language is a fun, technical-sounding representation of the text that makes it sound like pseudo-code or algorithmic instructions.
+          
+          Convert the following issue content:
           
           ```
           ${{ needs.activation.outputs.text }}
           ```
+          
+          ## Instructions:
+          1. Read and understand the issue content
+          2. Transform it to pseudo language by:
+             - Converting statements to pseudo-code style (e.g., "IF..THEN..ELSE", "WHILE", "FOR EACH")
+             - Using technical terminology and algorithmic language
+             - Maintaining the original meaning while making it sound more formal and code-like
+             - Adding programming-style syntax like arrows (→), assignments (←), and logical operators
+          3. Make it entertaining while keeping the essence of the original message
+          4. Post your pseudo-language transformation as a comment
+          
+          Example transformation:
+          - Original: "We need to fix the login button on the homepage"
+          - Pseudo: "PROCEDURE: FixLoginButton() → LOCATE element.homepage.loginButton → APPLY patch.fixBehavior() → VERIFY button.onClick() RETURNS success → END PROCEDURE"
           
           EOF
       - name: Append safe outputs instructions to prompt
@@ -1110,7 +1139,7 @@ jobs:
               engine_name: "GitHub Copilot CLI",
               model: "",
               version: "",
-              workflow_name: "Issue Triage",
+              workflow_name: "Pseudo Language Converter",
               experimental: true,
               supports_tools_allowlist: true,
               supports_http_transport: true,
@@ -2196,7 +2225,9 @@ jobs:
 
   create_issue_comment:
     needs: agent
-    if: github.event.issue.number || github.event.pull_request.number
+    if: >
+      (contains(github.event.issue.body, '/pseudo') || contains(github.event.comment.body, '/pseudo') || contains(github.event.pull_request.body, '/pseudo')) &&
+      (github.event.issue.number || github.event.pull_request.number)
     runs-on: ubuntu-latest
     permissions:
       contents: read

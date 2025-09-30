@@ -142,6 +142,7 @@ This repository includes example agentic workflows:
 
 | Workflow | Title | Role |
 |----------|-------|------|
+| [issue-triage](.github/workflows/issue-triage.md) | Issue Triage | Automatically summarizes new issues with emojis and responds in a comment |
 | [accessibility-review](.github/workflows/accessibility-review.md) | Accessibility Review for Slides | Reviews the accessibility of presentation slides on push to main |
 | [daily-log-scanner](.github/workflows/daily-log-scanner.md) | Daily Agentic Workflow Log Scanner | Analyzes recent GitHub Agentic Workflow runs daily to identify issues and missing tools |
 | [issue-triage](.github/workflows/issue-triage.md) | Issue Triage | Automatically summarizes new issues with emojis and responds in a comment |
