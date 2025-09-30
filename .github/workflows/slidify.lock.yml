@@ -3,24 +3,29 @@
 #   gh aw compile
 # For more information: https://github.com/githubnext/gh-aw/blob/main/.github/instructions/github-agentic-workflows.instructions.md
 
-name: "Agentic Workflow Documentation Updater"
+name: "Slidify - Generate Slide from Issue"
 on:
-  push:
-    branches:
-    - main
-    paths:
-    - .github/workflows/*.md
-  workflow_dispatch: null
+  issues:
+    types: [opened, edited, reopened]
+  issue_comment:
+    types: [created, edited]
+  pull_request:
+    types: [opened, edited, reopened]
+  pull_request_review_comment:
+    types: [created, edited]
 
 permissions: {}
 
 concurrency:
-  group: "gh-aw-${{ github.workflow }}-${{ github.ref }}"
+  group: "gh-aw-${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}"
 
-run-name: "Agentic Workflow Documentation Updater"
+run-name: "Slidify - Generate Slide from Issue"
 
 jobs:
   check-membership:
+    if: >
+      ((contains(github.event.issue.body, '/slidify')) || (contains(github.event.comment.body, '/slidify'))) ||
+      (contains(github.event.pull_request.body, '/slidify'))
     runs-on: ubuntu-latest
     outputs:
       error_message: ${{ steps.check-membership.outputs.error_message }}
@@ -28,7 +33,7 @@ jobs:
       result: ${{ steps.check-membership.outputs.result }}
       user_permission: ${{ steps.check-membership.outputs.user_permission }}
     steps:
-      - name: Check team membership for workflow
+      - name: Check team membership for command workflow
         id: check-membership
         uses: actions/github-script@v8
         env:
@@ -98,10 +103,317 @@ jobs:
 
   activation:
     needs: check-membership
-    if: needs.check-membership.outputs.is_team_member == 'true'
+    if: >
+      (needs.check-membership.outputs.is_team_member == 'true') && (((contains(github.event.issue.body, '/slidify')) ||
+      (contains(github.event.comment.body, '/slidify'))) || (contains(github.event.pull_request.body, '/slidify')))
     runs-on: ubuntu-latest
+    outputs:
+      text: ${{ steps.compute-text.outputs.text }}
     steps:
-      - run: echo "Activation success"
+      - name: Compute current body text
+        id: compute-text
+        uses: actions/github-script@v8
+        with:
+          script: |
+            function sanitizeContent(content) {
+              if (!content || typeof content !== "string") {
+                return "";
+              }
+              const allowedDomainsEnv = process.env.GITHUB_AW_ALLOWED_DOMAINS;
+              const defaultAllowedDomains = ["github.com", "github.io", "githubusercontent.com", "githubassets.com", "github.dev", "codespaces.new"];
+              const allowedDomains = allowedDomainsEnv
+                ? allowedDomainsEnv
+                    .split(",")
+                    .map(d => d.trim())
+                    .filter(d => d)
+                : defaultAllowedDomains;
+              let sanitized = content;
+              sanitized = neutralizeMentions(sanitized);
+              sanitized = sanitized.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, "");
+              sanitized = convertXmlTagsToParentheses(sanitized);
+              sanitized = sanitizeUrlProtocols(sanitized);
+              sanitized = sanitizeUrlDomains(sanitized);
+              const maxLength = 524288;
+              if (sanitized.length > maxLength) {
+                sanitized = sanitized.substring(0, maxLength) + "\n[Content truncated due to length]";
+              }
+              const lines = sanitized.split("\n");
+              const maxLines = 65000;
+              if (lines.length > maxLines) {
+                sanitized = lines.slice(0, maxLines).join("\n") + "\n[Content truncated due to line count]";
+              }
+              sanitized = sanitized.replace(/\x1b\[[0-9;]*[mGKH]/g, "");
+              sanitized = neutralizeBotTriggers(sanitized);
+              return sanitized.trim();
+              function convertXmlTagsToParentheses(s) {
+                if (!s || typeof s !== "string") {
+                  return s;
+                }
+                return (
+                  s
+                    .replace(/<\/?[a-zA-Z][a-zA-Z0-9\-_:]*(?:\s[^>]*|\/)?>/g, match => {
+                      const innerContent = match.slice(1, -1);
+                      return `(${innerContent})`;
+                    })
+                    .replace(/<!--[\s\S]*?-->/g, match => {
+                      const innerContent = match.slice(4, -3); 
+                      return `(!--${innerContent}--)`;
+                    })
+                    .replace(/<!\[CDATA\[[\s\S]*?\]\]>/g, match => {
+                      const innerContent = match.slice(9, -3); 
+                      return `(![CDATA[${innerContent}]])`;
+                    })
+                    .replace(/<\?[\s\S]*?\?>/g, match => {
+                      const innerContent = match.slice(2, -2); 
+                      return `(?${innerContent}?)`;
+                    })
+                    .replace(/<!DOCTYPE[^>]*>/gi, match => {
+                      const innerContent = match.slice(9, -1); 
+                      return `(!DOCTYPE${innerContent})`;
+                    })
+                );
+              }
+              function sanitizeUrlDomains(s) {
+                s = s.replace(/\bhttps:\/\/([^\/\s\])}'"<>&\x00-\x1f]+)/gi, (match, domain) => {
+                  const hostname = domain.split(/[\/:\?#]/)[0].toLowerCase();
+                  const isAllowed = allowedDomains.some(allowedDomain => {
+                    const normalizedAllowed = allowedDomain.toLowerCase();
+                    return hostname === normalizedAllowed || hostname.endsWith("." + normalizedAllowed);
+                  });
+                  return isAllowed ? match : "(redacted)";
+                });
+                return s;
+              }
+              function sanitizeUrlProtocols(s) {
+                return s.replace(/\b(\w+):(?:\/\/)?[^\s\])}'"<>&\x00-\x1f]+/gi, (match, protocol) => {
+                  return protocol.toLowerCase() === "https" ? match : "(redacted)";
+                });
+              }
+              function neutralizeMentions(s) {
+                return s.replace(
+                  /(^|[^\w`])@([A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?(?:\/[A-Za-z0-9._-]+)?)/g,
+                  (_m, p1, p2) => `${p1}\`@${p2}\``
+                );
+              }
+              function neutralizeBotTriggers(s) {
+                return s.replace(/\b(fixes?|closes?|resolves?|fix|close|resolve)\s+#(\w+)/gi, (match, action, ref) => `\`${action} #${ref}\``);
+              }
+            }
+            async function main() {
+              let text = "";
+              const actor = context.actor;
+              const { owner, repo } = context.repo;
+              const repoPermission = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner: owner,
+                repo: repo,
+                username: actor,
+              });
+              const permission = repoPermission.data.permission;
+              core.debug(`Repository permission level: ${permission}`);
+              if (permission !== "admin" && permission !== "maintain") {
+                core.setOutput("text", "");
+                return;
+              }
+              switch (context.eventName) {
+                case "issues":
+                  if (context.payload.issue) {
+                    const title = context.payload.issue.title || "";
+                    const body = context.payload.issue.body || "";
+                    text = `${title}\n\n${body}`;
+                  }
+                  break;
+                case "pull_request":
+                  if (context.payload.pull_request) {
+                    const title = context.payload.pull_request.title || "";
+                    const body = context.payload.pull_request.body || "";
+                    text = `${title}\n\n${body}`;
+                  }
+                  break;
+                case "pull_request_target":
+                  if (context.payload.pull_request) {
+                    const title = context.payload.pull_request.title || "";
+                    const body = context.payload.pull_request.body || "";
+                    text = `${title}\n\n${body}`;
+                  }
+                  break;
+                case "issue_comment":
+                  if (context.payload.comment) {
+                    text = context.payload.comment.body || "";
+                  }
+                  break;
+                case "pull_request_review_comment":
+                  if (context.payload.comment) {
+                    text = context.payload.comment.body || "";
+                  }
+                  break;
+                case "pull_request_review":
+                  if (context.payload.review) {
+                    text = context.payload.review.body || "";
+                  }
+                  break;
+                default:
+                  text = "";
+                  break;
+              }
+              const sanitizedText = sanitizeContent(text);
+              core.debug(`text: ${sanitizedText}`);
+              core.setOutput("text", sanitizedText);
+            }
+            await main();
+
+  add_reaction:
+    needs: activation
+    if: >
+      github.event_name == 'issues' || github.event_name == 'issue_comment' || github.event_name == 'pull_request_comment' ||
+      github.event_name == 'pull_request_review_comment' || (github.event_name == 'pull_request') &&
+      (github.event.pull_request.head.repo.full_name == github.repository)
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write  # Required for github.rest.actions.cancelWorkflowRun()
+      issues: write
+      pull-requests: write
+      contents: read
+    outputs:
+      reaction_id: ${{ steps.react.outputs.reaction-id }}
+    steps:
+      - name: Add +1 reaction to the triggering item
+        id: react
+        uses: actions/github-script@v8
+        env:
+          GITHUB_AW_REACTION: +1
+          GITHUB_AW_COMMAND: slidify
+        with:
+          script: |
+            async function main() {
+              const reaction = process.env.GITHUB_AW_REACTION || "eyes";
+              const command = process.env.GITHUB_AW_COMMAND; 
+              const runId = context.runId;
+              const runUrl = context.payload.repository
+                ? `${context.payload.repository.html_url}/actions/runs/${runId}`
+                : `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${runId}`;
+              core.info(`Reaction type: ${reaction}`);
+              core.info(`Command name: ${command || "none"}`);
+              core.info(`Run ID: ${runId}`);
+              core.info(`Run URL: ${runUrl}`);
+              const validReactions = ["+1", "-1", "laugh", "confused", "heart", "hooray", "rocket", "eyes"];
+              if (!validReactions.includes(reaction)) {
+                core.setFailed(`Invalid reaction type: ${reaction}. Valid reactions are: ${validReactions.join(", ")}`);
+                return;
+              }
+              let reactionEndpoint;
+              let commentUpdateEndpoint;
+              let shouldEditComment = false;
+              const eventName = context.eventName;
+              const owner = context.repo.owner;
+              const repo = context.repo.repo;
+              try {
+                switch (eventName) {
+                  case "issues":
+                    const issueNumber = context.payload?.issue?.number;
+                    if (!issueNumber) {
+                      core.setFailed("Issue number not found in event payload");
+                      return;
+                    }
+                    reactionEndpoint = `/repos/${owner}/${repo}/issues/${issueNumber}/reactions`;
+                    shouldEditComment = false;
+                    break;
+                  case "issue_comment":
+                    const commentId = context.payload?.comment?.id;
+                    if (!commentId) {
+                      core.setFailed("Comment ID not found in event payload");
+                      return;
+                    }
+                    reactionEndpoint = `/repos/${owner}/${repo}/issues/comments/${commentId}/reactions`;
+                    commentUpdateEndpoint = `/repos/${owner}/${repo}/issues/comments/${commentId}`;
+                    shouldEditComment = command ? true : false;
+                    break;
+                  case "pull_request":
+                    const prNumber = context.payload?.pull_request?.number;
+                    if (!prNumber) {
+                      core.setFailed("Pull request number not found in event payload");
+                      return;
+                    }
+                    reactionEndpoint = `/repos/${owner}/${repo}/issues/${prNumber}/reactions`;
+                    shouldEditComment = false;
+                    break;
+                  case "pull_request_review_comment":
+                    const reviewCommentId = context.payload?.comment?.id;
+                    if (!reviewCommentId) {
+                      core.setFailed("Review comment ID not found in event payload");
+                      return;
+                    }
+                    reactionEndpoint = `/repos/${owner}/${repo}/pulls/comments/${reviewCommentId}/reactions`;
+                    commentUpdateEndpoint = `/repos/${owner}/${repo}/pulls/comments/${reviewCommentId}`;
+                    shouldEditComment = command ? true : false;
+                    break;
+                  default:
+                    core.setFailed(`Unsupported event type: ${eventName}`);
+                    return;
+                }
+                core.info(`Reaction API endpoint: ${reactionEndpoint}`);
+                await addReaction(reactionEndpoint, reaction);
+                if (shouldEditComment && commentUpdateEndpoint) {
+                  core.info(`Comment update endpoint: ${commentUpdateEndpoint}`);
+                  await editCommentWithWorkflowLink(commentUpdateEndpoint, runUrl);
+                } else {
+                  if (!command && commentUpdateEndpoint) {
+                    core.info("Skipping comment edit - only available for command workflows");
+                  } else {
+                    core.info(`Skipping comment edit for event type: ${eventName}`);
+                  }
+                }
+              } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                core.error(`Failed to process reaction and comment edit: ${errorMessage}`);
+                core.setFailed(`Failed to process reaction and comment edit: ${errorMessage}`);
+              }
+            }
+            async function addReaction(endpoint, reaction) {
+              const response = await github.request("POST " + endpoint, {
+                content: reaction,
+                headers: {
+                  Accept: "application/vnd.github+json",
+                },
+              });
+              const reactionId = response.data?.id;
+              if (reactionId) {
+                core.info(`Successfully added reaction: ${reaction} (id: ${reactionId})`);
+                core.setOutput("reaction-id", reactionId.toString());
+              } else {
+                core.info(`Successfully added reaction: ${reaction}`);
+                core.setOutput("reaction-id", "");
+              }
+            }
+            async function editCommentWithWorkflowLink(endpoint, runUrl) {
+              try {
+                const getResponse = await github.request("GET " + endpoint, {
+                  headers: {
+                    Accept: "application/vnd.github+json",
+                  },
+                });
+                const originalBody = getResponse.data.body || "";
+                const workflowLinkText = `\n\n---\n*🤖 [Workflow run](${runUrl}) triggered by this comment*`;
+                if (originalBody.includes("*🤖 [Workflow run](")) {
+                  core.info("Comment already contains a workflow run link, skipping edit");
+                  return;
+                }
+                const updatedBody = originalBody + workflowLinkText;
+                const updateResponse = await github.request("PATCH " + endpoint, {
+                  body: updatedBody,
+                  headers: {
+                    Accept: "application/vnd.github+json",
+                  },
+                });
+                core.info(`Successfully updated comment with workflow link`);
+                core.info(`Comment ID: ${updateResponse.data.id}`);
+              } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : String(error);
+                core.warning(
+                  "Failed to edit comment with workflow link (This is not critical - the reaction was still added successfully): " + errorMessage
+                );
+              }
+            }
+            await main();
 
   agent:
     needs: activation
@@ -773,52 +1085,57 @@ jobs:
         run: |
           mkdir -p $(dirname "$GITHUB_AW_PROMPT")
           cat > $GITHUB_AW_PROMPT << 'EOF'
-          # Agentic Workflow Documentation Updater
+          # Slidify - Generate Slide from Issue
           
-          This workflow automatically updates the README.md with a summary table of all agentic workflows in the repository.
+          Transform the following issue content into a new Marp slide and add it to README.md:
           
-          ## Your Task
+          ```
+          ${{ needs.activation.outputs.text }}
+          ```
           
-          1. **Discover all agentic workflows**: List all `.md` files in the `.github/workflows/` directory (excluding `.lock.yml` files and non-agentic workflow files like `build-typescript.yml`).
+          ## Instructions:
           
-          2. **Extract workflow information**: For each agentic workflow file:
-             - Extract the workflow title (the first H1 heading in the markdown content, e.g., `# Issue Triage`)
-             - Determine the workflow's role/purpose from the markdown description (the text immediately after the H1 heading)
-             - Note the filename (without the `.md` extension) for creating links
+          1. **Read README.md** to understand the existing slide structure
+          2. **Transform the issue content** into a professional Marp slide:
+             - Create a clear, concise slide title (use `# Title` format)
+             - Add relevant content from the issue in a presentation-friendly format
+             - Use bullet points, code blocks, or other markdown formatting as appropriate
+             - Keep it focused and suitable for a technical presentation
+             - Maintain consistency with the existing slide style in README.md
+          3. **Insert the new slide** at an appropriate location before the "Agentic Workflows" table section:
+             - The new slide should go after the existing content slides but before the final "Agentic Workflows" section
+             - Add the slide separator `---` before and after the new slide
+             - Ensure proper spacing and formatting
+          4. **Create a pull request** with:
+             - Title describing the new slide topic
+             - Description explaining what was added
+             - The modified README.md file
           
-          3. **Generate a markdown table**: Create a table with the following columns:
-             - **Workflow**: The filename (as a link to the workflow file, e.g., `[issue-triage](.github/workflows/issue-triage.md)`)
-             - **Title**: The H1 heading from the workflow
-             - **Role**: A brief description of what the workflow does (1-2 sentences max)
+          ## Example Transformation:
           
-          4. **Update README.md**: 
-             - Locate the "## Agentic Workflows" section in README.md
-             - Replace the current bullet list with the generated markdown table
-             - Preserve the section title and any text before the list/table
-             - Ensure the table is properly formatted with markdown table syntax
+          **Issue Content:**
+          "Add a slide about GitHub Copilot features: code completion, chat, CLI"
           
-          5. **Create a pull request**: Use the safe-outputs to create a pull request with your changes. The PR should:
-             - Have a clear title indicating it's updating workflow documentation
-             - Include a description explaining what was updated
-             - Show the new table of workflows
+          **Generated Slide:**
+          ```markdown
+          ---
           
-          ## Example Table Format
+          # GitHub Copilot Features
           
-          The table should look like this:
+          - **Code Completion** — AI-powered suggestions as you type
           
-          | Workflow | Title | Role |
-          |----------|-------|------|
-          | [issue-triage](.github/workflows/issue-triage.md) | Issue Triage | Automatically summarizes new issues with emojis |
-          | [accessibility-review](.github/workflows/accessibility-review.md) | Accessibility Review for Slides | Reviews presentation slides for accessibility issues on push to main |
+          - **Chat** — Natural language interaction for code questions
           
-          ## Important Notes
+          - **CLI** — Command-line interface for terminal workflows
           
-          - Only include `.md` files from `.github/workflows/` that are agentic workflows (have YAML frontmatter with `engine:` field)
-          - Skip compiled `.lock.yml` files and standard GitHub Actions YAML files
-          - Keep descriptions concise and informative
-          - Ensure the table is properly formatted with consistent spacing
-          - If you cannot determine a workflow's role from the content, use a generic description like "Automated workflow task"
-          - DO NOT EDIT MARKDOWN FILES in .github/workflows/*
+          ---
+          ```
+          
+          Remember:
+          - Use the sanitized issue content from `${{ needs.activation.outputs.text }}`
+          - Keep the slide concise and presentation-ready
+          - Follow the existing Marp format in README.md
+          - Place the slide in a logical position within the presentation flow
           
           EOF
       - name: Append safe outputs instructions to prompt
@@ -863,7 +1180,7 @@ jobs:
               engine_name: "GitHub Copilot CLI",
               model: "",
               version: "",
-              workflow_name: "Agentic Workflow Documentation Updater",
+              workflow_name: "Slidify - Generate Slide from Issue",
               experimental: true,
               supports_tools_allowlist: true,
               supports_http_transport: true,
@@ -903,7 +1220,6 @@ jobs:
         id: agentic_execution
         # Copilot CLI tool arguments (sorted):
         # --allow-tool safe_outputs
-        # --allow-tool shell(cat .github/workflows/*.md)
         # --allow-tool shell(cat)
         # --allow-tool shell(date)
         # --allow-tool shell(echo)
@@ -914,10 +1230,8 @@ jobs:
         # --allow-tool shell(git merge:*)
         # --allow-tool shell(git rm:*)
         # --allow-tool shell(git switch:*)
-        # --allow-tool shell(grep -A 5 '^# ' .github/workflows/*.md)
         # --allow-tool shell(grep)
         # --allow-tool shell(head)
-        # --allow-tool shell(ls -la .github/workflows/*.md)
         # --allow-tool shell(ls)
         # --allow-tool shell(pwd)
         # --allow-tool shell(sort)
@@ -932,7 +1246,7 @@ jobs:
           INSTRUCTION=$(cat /tmp/aw-prompts/prompt.txt)
           
           # Run copilot CLI with log capture
-          copilot --add-dir /tmp/ --log-level all --log-dir /tmp/.copilot/logs/ --allow-tool safe_outputs --allow-tool 'shell(cat .github/workflows/*.md)' --allow-tool 'shell(cat)' --allow-tool 'shell(date)' --allow-tool 'shell(echo)' --allow-tool 'shell(git add:*)' --allow-tool 'shell(git branch:*)' --allow-tool 'shell(git checkout:*)' --allow-tool 'shell(git commit:*)' --allow-tool 'shell(git merge:*)' --allow-tool 'shell(git rm:*)' --allow-tool 'shell(git switch:*)' --allow-tool 'shell(grep -A 5 '"'"'^# '"'"' .github/workflows/*.md)' --allow-tool 'shell(grep)' --allow-tool 'shell(head)' --allow-tool 'shell(ls -la .github/workflows/*.md)' --allow-tool 'shell(ls)' --allow-tool 'shell(pwd)' --allow-tool 'shell(sort)' --allow-tool 'shell(tail)' --allow-tool 'shell(uniq)' --allow-tool 'shell(wc)' --allow-tool write --prompt "$INSTRUCTION" 2>&1 | tee /tmp/agent-stdio.log
+          copilot --add-dir /tmp/ --log-level all --log-dir /tmp/.copilot/logs/ --allow-tool safe_outputs --allow-tool 'shell(cat)' --allow-tool 'shell(date)' --allow-tool 'shell(echo)' --allow-tool 'shell(git add:*)' --allow-tool 'shell(git branch:*)' --allow-tool 'shell(git checkout:*)' --allow-tool 'shell(git commit:*)' --allow-tool 'shell(git merge:*)' --allow-tool 'shell(git rm:*)' --allow-tool 'shell(git switch:*)' --allow-tool 'shell(grep)' --allow-tool 'shell(head)' --allow-tool 'shell(ls)' --allow-tool 'shell(pwd)' --allow-tool 'shell(sort)' --allow-tool 'shell(tail)' --allow-tool 'shell(uniq)' --allow-tool 'shell(wc)' --allow-tool write --prompt "$INSTRUCTION" 2>&1 | tee /tmp/agent-stdio.log
         env:
           COPILOT_AGENT_RUNNER_TYPE: STANDALONE
           GITHUB_AW_SAFE_OUTPUTS: ${{ env.GITHUB_AW_SAFE_OUTPUTS }}
@@ -2102,9 +2416,9 @@ jobs:
           GITHUB_AW_AGENT_OUTPUT: ${{ needs.agent.outputs.output }}
           GITHUB_AW_WORKFLOW_ID: "agent"
           GITHUB_AW_BASE_BRANCH: ${{ github.ref_name }}
-          GITHUB_AW_PR_TITLE_PREFIX: "[docs] "
-          GITHUB_AW_PR_LABELS: "documentation,automation"
-          GITHUB_AW_PR_DRAFT: "false"
+          GITHUB_AW_PR_TITLE_PREFIX: "[slidify] "
+          GITHUB_AW_PR_LABELS: "automation,slides"
+          GITHUB_AW_PR_DRAFT: "true"
           GITHUB_AW_PR_IF_NO_CHANGES: "warn"
           GITHUB_AW_MAX_PATCH_SIZE: 1024
         with:

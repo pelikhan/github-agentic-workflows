@@ -2,7 +2,7 @@
 on:
   command:
     name: slidify
-  reaction: "art"
+  reaction: "+1"
 permissions:
   contents: read
   actions: read
