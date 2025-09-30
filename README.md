@@ -241,7 +241,7 @@ mcp-servers:
 Use built-in GitHub tools and custom MCP server tools.
 ```
 
-**MCP Servers:** Extend agents with custom capabilities through the [Model Context Protocol](https://modelcontextprotocol.io/)
+**MCP Servers:** Define custom tools and functions that agents can use alongside built-in GitHub tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ---
 
