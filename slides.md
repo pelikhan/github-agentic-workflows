@@ -43,6 +43,18 @@ Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Micros
 
 ---
 
+# 3 Phases of Agentic Workflows
+
+- **Activation** — Authorization
+
+- **Agent** — Copilot
+
+- **Detection** — XPAi
+
+- **Action** — Safe Outputs
+
+---
+
 # GitHub Actions
 
 GitHub Actions are YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, or issues—no GUI editor needed, unlike Azure DevOps Pipelines.
@@ -93,4 +105,29 @@ SWE agents process untrusted data from multiple sources:
 **Mitigations:** Input sanitization, read-only permissions, safe-outputs, content validation
 
 > https://owasp.org/www-project-top-10-for-large-language-model-applications/
+
+---
+
+# Issue Triage Example
+## Agentic Workflow in Natural Language
+
+Write workflows in Markdown with YAML frontmatter—no complex YAML jobs needed!
+
+```markdown
+---
+on:
+  issues:
+    types: [opened, reopened]
+permissions:
+  issues: read
+engine: copilot
+safe-outputs:
+  add-comment:
+---
+# Issue Triage
+Summarize issue #${{ github.event.issue.number }} in 3 emojis. 
+Respond in a comment.
+```
+
+This compiles to a full GitHub Actions workflow that uses AI to triage issues automatically.
 

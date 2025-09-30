@@ -164,6 +164,9 @@ coverage/
 tmp/
 temp/
 
+# Generated slides
+slides.html
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
