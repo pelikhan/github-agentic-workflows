@@ -136,6 +136,13 @@ interface CowsayOptions {
 
 This repository also contains materials for a presentation on **GitHub Agentic Workflows** and **Continuous AI**. See [AGENTS.md](./AGENTS.md) for details.
 
+## Agentic Workflows
+
+This repository includes example agentic workflows:
+
+- **[Issue Triage](.github/workflows/issue-triage.md)** - Automatically summarizes new issues with emojis
+- **[Accessibility Review](.github/workflows/accessibility-review.md)** - Reviews presentation slides for accessibility issues on push to main
+
 ## Tools
 
 ```
