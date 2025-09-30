@@ -5,8 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'slides.md'
-      - 'slides.html'
+      - 'README.md'
 permissions:
   contents: read
   actions: read
@@ -27,7 +26,7 @@ This workflow reviews the accessibility of the presentation slides.
 
 ## Steps to perform:
 
-1. **Build the slides**: Run `npx @marp-team/marp-cli slides.md -o slides.html` to rebuild the HTML slides from the Markdown source.
+1. **Build the slides**: Run `npx @marp-team/marp-cli README.md -o slides.html` to rebuild the HTML slides from the Markdown source.
 
 2. **Take a screenshot**: Use Playwright to navigate to the `slides.html` file and take a screenshot of the first slide. Save it to a file.
 
