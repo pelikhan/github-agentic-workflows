@@ -55,7 +55,7 @@ on:
     paths:
       - '**.ts'
       - 'tsconfig.json'
-      - 'package.json'
+      - 'package*.json'
 
 jobs:
   build:
