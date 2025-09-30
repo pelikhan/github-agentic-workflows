@@ -8,8 +8,9 @@ marp: true
 Peli de Halleux
 Microsoft Research
 
-> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github),
-Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
+https://github.com/githubnext/gh-aw
+
+> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github), Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
 ---
 
@@ -309,3 +310,16 @@ copilot
 | [pseudo](.github/workflows/pseudo.md) | Pseudo Language Converter |
 | [slidify](.github/workflows/slidify.md) | Slidify - Generate Slide from Issue |
 | [update-workflow-docs](.github/workflows/update-workflow-docs.md) | Agentic Workflow Documentation Updater | 
+
+---
+
+# GitHub Agentic Workflows
+## (Research Preview)
+
+Peli de Halleux
+Microsoft Research
+
+https://github.com/githubnext/gh-aw
+
+> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github),
+Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
