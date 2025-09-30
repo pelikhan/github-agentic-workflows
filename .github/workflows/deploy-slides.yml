@@ -30,11 +30,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Marp CLI
-        run: npm install -g @marp-team/marp-cli
-
       - name: Compile slides
-        run: marp slides.md -o slides.html
+        run: npx @marp-team/marp-cli@latest slides.md -o dist/index.html
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -42,7 +39,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
+          path: 'dist'
 
   deploy:
     environment:
