@@ -4,7 +4,7 @@ on:
     types: [opened, reopened]
   reaction: "eyes"
 permissions:
-  contents: read
+  issues: read
 engine: copilot
 network: defaults
 safe-outputs:
