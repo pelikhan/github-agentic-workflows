@@ -69,3 +69,4 @@ The table should look like this:
 - Keep descriptions concise and informative
 - Ensure the table is properly formatted with consistent spacing
 - If you cannot determine a workflow's role from the content, use a generic description like "Automated workflow task"
+- DO NOT EDIT MARKDOWN FILES in .github/workflows/*
