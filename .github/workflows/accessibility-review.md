@@ -18,6 +18,7 @@ safe-outputs:
   create-issue:
     title-prefix: "[accessibility] "
     labels: [accessibility, automation]
+  upload-assets:
 ---
 
 # Accessibility Review for Slides
