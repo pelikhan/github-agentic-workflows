@@ -8,7 +8,7 @@ on:
 permissions:
   contents: read
   actions: read
-engine: claude
+engine: copilot
 network: defaults
 tools:
   bash:
