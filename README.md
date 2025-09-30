@@ -146,8 +146,8 @@ Respond in a comment.
 on:
   push:
 permissions:
-  contents: read    # Agent: minimal permissions
-  actions: read
+  contents: read    # Agent: minimal permissions only
+  actions: read     # NO issues: write needed!
 engine: copilot
 safe-outputs:
   create-issue:     # Separate job handles writes
@@ -157,6 +157,8 @@ safe-outputs:
 # Code Analysis Agent
 Analyze code changes and create an issue with findings.
 ```
+
+**Security:** Agent has zero write access. Safe-outputs job creates issues separately.
 
 **Flow:** Agent Job (read-only) → Sanitized Outputs → Action Job (write permissions)
 
