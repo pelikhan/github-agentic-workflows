@@ -29,9 +29,9 @@ Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Micros
 
 - Accessibility review.
 
-- Continuous documentation.
+- Documentation.
 
-- Continuous test improvement.
+- Test improvement.
 
 - ...
 
@@ -42,12 +42,12 @@ Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Micros
 GitHub Actions are YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
 
 ```yaml
-name: Build TypeScript
-
-on:
+on: #triggers
   push:
+permissions: # dynamic PAT 
+  contents: read
 jobs:
-  build:
+  build: # containerized
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -59,11 +59,13 @@ jobs:
 
 # CA - Issue triage
 
-Use AI to create new automations.
+Use AI to create new automations. 
 
 ```yaml
 on:
   issues: [created]
+permissions: 
+  issues: write # danger
 jobs:
   ai:
     steps:
@@ -104,7 +106,7 @@ SWE agents process untrusted data from multiple sources:
 
 # GitHub Agentic Workflows
 
-- Natural Language
+- Natural Language (Markdown is a programming language)
 
 - Automated
 
@@ -132,20 +134,23 @@ Label current issue.
 ---
 
 # Agentic Workflow Compiler
-## GitHub Action yml is "bytecode"
+GitHub Action yml is "bytecode"
 
 ```yaml
 jobs:
   check_permissions:
     run: check role
+
   agent: needs[check-permissions]
     permissions: issues: read # no writes!
     run: copilot "label current issue" --mcp add-labels
+
   detection: needs[agent]
     run: detect malicious outputs
     permissions: none
-  create-issue: needs[detection]
-    run: add labels
+
+  add-labels: needs[detection]
+    run: gh labels add ...
     permissions: issues: write
 ```
 
@@ -177,30 +182,14 @@ permissions:
   contents: read    # Agent: minimal permissions only
 safe-outputs:
   create-issue:     # Separate job handles writes
-    title-prefix: "[ai] "
+  create-pull-request:
+  upload-assets:
+  add-comment:
 ---
 Analyze code changes and create an issue with findings.
 ```
 
 Agent has read-only access. Safe-outputs job creates issues separately.
-
----
-
-# Agentic Workflow Compiler
-## GitHub Action yml is "bytecode"
-
-```yaml
-jobs:
-  check_permissions:
-  agent: needs[check-permissions]
-    permissions: issues: read
-    run: copilot "summarize issue"
-  detection: needs[agent]
-    permissions: none
-  create-issue: needs[detection]
-    permissions: issues: write
-```
-
 
 ---
 
@@ -215,6 +204,8 @@ jobs:
 engine: claude
 engine: copilot
   model: gpt5
+engine: custom
+  steps: ...
 ```
 
 ---
@@ -265,12 +256,14 @@ Use the custom MCP server tools.
 mcp-servers:
   fetch:
     container: mcp/fetch
-    permissions:
+    permissions: # egress squid proxy installed automatically
       network:
         allowed:
           - "example.com"
     allowed: ["fetch"]
 ```
+
+Trust, but verify.
 
 ---
 
