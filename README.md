@@ -140,4 +140,5 @@ This repository also contains materials for a presentation on **GitHub Agentic W
 
 ```
 npm install -g @github/copilot
+npm install -g @marp-team/marp-cli
 ```
