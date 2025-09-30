@@ -7,6 +7,9 @@ permissions:
   issues: read
 engine: copilot
 network: defaults
+tools:
+  github:
+    allowed: ["*"]
 safe-outputs:
   add-comment:
 ---
