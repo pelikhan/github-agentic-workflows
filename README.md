@@ -216,6 +216,35 @@ Analyze the PR and fetch documentation from allowed domains only.
 
 ---
 
+# MCP Servers Configuration
+## Extend agents with Model Context Protocol
+
+```yaml
+---
+on:
+  issues:
+    types: [opened]
+permissions: read
+engine: claude
+tools:
+  github:
+    allowed: ["*"]
+mcp-servers:
+  my-custom-tool:
+    command: "node"
+    args: ["path/to/mcp-server.js"]
+    allowed:
+      - custom_function_1
+      - custom_function_2
+---
+# Custom Agent
+Use built-in GitHub tools and custom MCP server tools.
+```
+
+**MCP Servers:** Extend agents with custom capabilities through the [Model Context Protocol](https://modelcontextprotocol.io/)
+
+---
+
 # Getting started
 
 ```sh
