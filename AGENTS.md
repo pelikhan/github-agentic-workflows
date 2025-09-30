@@ -40,6 +40,11 @@ Our audience knows **Azure DevOps Pipelines** but is new to GitHub Actions and A
 
 Use TypeScript ESM, Node v20, NPM to generate demo code.
 
+## Rebuilding workflows
+
+- Install the githubnext/gh-aw extension `gh extension install githubnext/gh-aw`
+- run `gh aw compile`
+
 ## Background Research  
 
 - **GitHub Actions vs Azure Pipelines:**  
