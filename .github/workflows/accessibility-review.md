@@ -1,9 +1,8 @@
 ---
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [ready_for_review]
     paths:
       - 'README.md'
 permissions:
