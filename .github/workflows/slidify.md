@@ -14,7 +14,7 @@ safe-outputs:
   create-pull-request:
     title-prefix: "[slidify] "
     labels: [automation, slides]
-    draft: false
+    draft: true
 ---
 # Slidify - Generate Slide from Issue
 
