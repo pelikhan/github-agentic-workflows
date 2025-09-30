@@ -15,8 +15,8 @@ Our audience knows **Azure DevOps Pipelines** but is new to GitHub Actions and A
 
 ## Slide & Demo Requirements  
 
-- **Slides (Demo Time):**  
-  Use [Demo Time](https://demotime.elio.dev/llms.txtload ) to interleave slides and live code.  
+- **Slides:**  
+  README.md is a slide deck using [Marp](https://marp.app/) syntax (note the `marp: true` frontmatter).  
   - Intro: *What are Agentic Workflows? Why Continuous AI?*  
   - Comparison: GitHub Actions vs Azure Pipelines.  
   - Visual: Natural language → LLM engine → GitHub Action run.  
