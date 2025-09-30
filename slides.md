@@ -69,3 +69,28 @@ jobs:
       - run: npm run build
 ```
 
+---
+
+# Issue Triage Example
+## Agentic Workflow in Natural Language
+
+Write workflows in Markdown with YAML frontmatter—no complex YAML jobs needed!
+
+```markdown
+---
+on:
+  issues:
+    types: [opened, reopened]
+permissions:
+  issues: read
+engine: copilot
+safe-outputs:
+  add-comment:
+---
+# Issue Triage
+Summarize issue #${{ github.event.issue.number }} in 3 emojis. 
+Respond in a comment.
+```
+
+This compiles to a full GitHub Actions workflow that uses AI to triage issues automatically.
+
