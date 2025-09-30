@@ -175,3 +175,33 @@ tools:
 Analyze the PR and fetch documentation from allowed domains only.
 ```
 
+---
+
+# Getting started
+
+```sh
+# install the extension
+gh extension install githubnext/gh-aw
+# create a new script
+gh add
+# compile and commit
+gh compile
+```
+
+---
+
+# Agentic Editing for Agentic Workflow
+
+
+Spin up copilot
+
+```sh
+npm install -g @github/copilot
+```
+
+Load the prompt and go!
+
+```sh
+copilot
+"load https://raw.githubusercontent.com/githubnext/gh-aw/main/.github/prompts/create-agentic-workflow.prompt.md"
+```
