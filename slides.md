@@ -45,3 +45,27 @@ Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Micros
 
 # GitHub Actions
 
+GitHub Actions are YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, or issues—no GUI editor needed, unlike Azure DevOps Pipelines.
+
+```yaml
+name: Build TypeScript
+
+on:
+  push:
+    paths:
+      - '**.ts'
+      - 'tsconfig.json'
+      - 'package*.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm install
+      - run: npm run build
+```
+

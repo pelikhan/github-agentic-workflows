@@ -1,0 +1,29 @@
+name: Build TypeScript
+
+on:
+  push:
+    paths:
+      - '**.ts'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'package-lock.json'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Build TypeScript
+        run: npm run build
