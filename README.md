@@ -169,7 +169,7 @@ jobs:
 
 ```yaml
 ---
-on:
+on: 
   push:
 permissions:
   contents: read    # Agent: minimal permissions only
@@ -180,7 +180,25 @@ safe-outputs:
 Analyze code changes and create an issue with findings.
 ```
 
-**Security:** Agent has zero write access. Safe-outputs job creates issues separately.
+Agent has read-only access. Safe-outputs job creates issues separately.
+
+---
+
+# Agentic Workflow Compiler
+## GitHub Action yml is "bytecode"
+
+```yaml
+jobs:
+  check_permissions:
+  agent: needs[check-permissions]
+    permissions: issues: read
+    run: copilot "summarize issue"
+  detection: needs[agent]
+    permissions: none
+  create-issue: needs[detection]
+    permissions: issues: write
+```
+
 
 ---
 
@@ -199,7 +217,7 @@ engine: copilot
 
 ---
 
-# Network Rules & Firewall (_Under construction_)
+# Agent Firewall (_Under construction_)
 
 ```yaml
 ---
@@ -215,6 +233,41 @@ tools:
   web-fetch:
 ---
 Analyze the PR and fetch documentation from allowed domains only.
+```
+
+---
+
+# MCP Servers Configuration
+
+```yaml
+---
+on:
+  issues: [opened]
+mcp-servers:
+  my-custom-tool:
+    command: "node"
+    args: ["path/to/mcp-server.js"]
+    allowed:
+      - custom_function_1
+---
+Use the custom MCP server tools.
+```
+
+**MCP Servers:** Define custom tools and functions that agents can use alongside built-in GitHub tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
+
+---
+
+# Containerized, Firewalled MCPs
+
+```yaml
+mcp-servers:
+  fetch:
+    container: mcp/fetch
+    permissions:
+      network:
+        allowed:
+          - "example.com"
+    allowed: ["fetch"]
 ```
 
 ---
