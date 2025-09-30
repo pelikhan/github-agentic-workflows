@@ -10,6 +10,8 @@ Microsoft Research
 
 https://github.com/githubnext/gh-aw
 
+**...The actions have been disabled...**
+
 > in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github), Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
 ---
