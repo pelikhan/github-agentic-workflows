@@ -1,5 +1,7 @@
 # AGENTS.md — GitHub Agentic Workflows & Continuous AI Presentation
 
+> `./gh-aw` is an alias of `gh aw`!
+
 ## Project Overview 
 This repository is for a presentation on **GitHub Agentic Workflows** and **Continuous AI**.  
 
