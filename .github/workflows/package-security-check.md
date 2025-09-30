@@ -10,9 +10,7 @@ permissions:
 engine: claude
 network:
   allowed:
-    - defaults
     - node
-    - python
 tools:
   web-fetch:
   web-search:
