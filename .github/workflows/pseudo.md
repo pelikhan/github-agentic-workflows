@@ -2,7 +2,7 @@
 on:
   command:
     name: pseudo
-    reaction: "rocket"
+  reaction: "rocket"
 permissions:
   issues: read
 engine: copilot
