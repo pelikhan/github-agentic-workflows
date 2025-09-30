@@ -146,7 +146,7 @@ Respond in a comment.
 
 ```yaml
 ---
-on:
+on: 
   push:
 permissions:
   contents: read    # Agent: minimal permissions only
@@ -154,16 +154,11 @@ permissions:
 engine: copilot
 safe-outputs:
   create-issue:     # Separate job handles writes
-    title-prefix: "[ai] "
-    labels: [automation, ai-generated]
 ---
-# Code Analysis Agent
 Analyze code changes and create an issue with findings.
 ```
 
-**Security:** Agent has zero write access. Safe-outputs job creates issues separately.
-
-**Flow:** Agent Job (read-only) → Sanitized Outputs → Action Job (write permissions)
+Agent has read-only access. Safe-outputs job creates issues separately.
 
 ---
 
@@ -194,7 +189,7 @@ jobs:
 
 ---
 
-# Network Rules & Firewall (_Under construction_)
+# Agent Firewall (_Under construction_)
 
 ```yaml
 ---
@@ -233,6 +228,21 @@ Use the custom MCP server tools.
 ```
 
 **MCP Servers:** Define custom tools and functions that agents can use alongside built-in GitHub tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
+
+---
+
+# Containerized, Firewalled MCPs
+
+```yaml
+mcp-servers:
+  fetch:
+    container: mcp/fetch
+    permissions:
+      network:
+        allowed:
+          - "example.com"
+    allowed: ["fetch"]
+```
 
 ---
 
