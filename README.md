@@ -259,10 +259,9 @@ Use the custom MCP server tools.
 mcp-servers:
   fetch:
     container: mcp/fetch
-    permissions: # egress squid proxy installed automatically
-      network:
-        allowed:
-          - "example.com"
+    network:  # egress squid proxy installed automatically
+      allowed:
+        - "example.com"
     allowed: ["fetch"]
 ```
 
@@ -276,9 +275,9 @@ Trust, but verify.
 # install the extension
 gh extension install githubnext/gh-aw
 # create a new script
-gh add
+gh aw add
 # compile and commit
-gh compile
+gh aw compile
 ```
 
 > https://github.com/githubnext/gh-aw/
