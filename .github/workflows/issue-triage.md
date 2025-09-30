@@ -5,7 +5,7 @@ on:
   reaction: "eyes"
 permissions:
   issues: read
-engine: copilot
+engine: claude
 network: defaults
 tools:
   github:
