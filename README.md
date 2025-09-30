@@ -138,6 +138,32 @@ Respond in a comment.
 
 ---
 
+# Safe Outputs: Secure AI Actions
+## Agent runs with read-only, outputs processed separately
+
+```yaml
+---
+on:
+  push:
+permissions:
+  contents: read    # Agent: minimal permissions only
+  actions: read     # NO issues: write needed!
+engine: copilot
+safe-outputs:
+  create-issue:     # Separate job handles writes
+    title-prefix: "[ai] "
+    labels: [automation, ai-generated]
+---
+# Code Analysis Agent
+Analyze code changes and create an issue with findings.
+```
+
+**Security:** Agent has zero write access. Safe-outputs job creates issues separately.
+
+**Flow:** Agent Job (read-only) → Sanitized Outputs → Action Job (write permissions)
+
+---
+
 # Agentic Workflow Compiler
 ## GitHub Action yml is "bytecode"
 
