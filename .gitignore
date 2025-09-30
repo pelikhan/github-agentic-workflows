@@ -182,3 +182,6 @@ temp/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Generated presentation files
+slides.html
