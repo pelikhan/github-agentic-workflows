@@ -106,3 +106,61 @@ Respond in a comment.
 
 This compiles to a full GitHub Actions workflow that uses AI to triage issues automatically.
 
+---
+
+# Network Rules & Firewall
+## Controlling AI Agent Network Access
+
+GitHub Agentic Workflows include **network access controls** for AI agents to enhance security and prevent unintended external access.
+
+- **Default**: Basic infrastructure only (certificates, JSON schema, Ubuntu)
+- **Ecosystem identifiers**: Pre-configured allowlists for common tools (python, node, java, etc.)
+- **Custom domains**: Exact domain matches and wildcard patterns
+- **Complete lockdown**: Deny all network access with `network: {}`
+
+---
+
+# Network Permission Modes
+
+Four levels of network access control:
+
+1. **Basic Infrastructure** — `network: defaults`
+   - Certificates, JSON schema, Ubuntu repositories
+
+2. **Ecosystem Access** — `network: { allowed: [defaults, python, node] }`
+   - Language-specific package managers and tools
+
+3. **Custom Domains** — `network: { allowed: ["api.example.com", "*.trusted.com"] }`
+   - Granular control with exact matches and wildcards
+
+4. **No Network** — `network: {}`
+   - Complete network isolation for sensitive workflows
+
+---
+
+# Network Configuration Example
+
+```yaml
+---
+on:
+  pull_request:
+    types: [opened]
+permissions:
+  contents: read
+engine: claude
+network:
+  allowed:
+    - defaults       # Basic infrastructure
+    - python        # PyPI ecosystem
+    - node          # NPM ecosystem
+    - "api.github.com"  # Custom domain
+tools:
+  web-fetch:
+  web-search:
+---
+# Code Review Agent
+Analyze the PR and fetch documentation from allowed domains only.
+```
+
+The `network:` field enforces a firewall using Claude Code hooks—not network proxies.
+
