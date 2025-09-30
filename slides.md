@@ -43,6 +43,18 @@ Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Micros
 
 ---
 
+# 3 Phases of Agentic Workflows
+
+- **Activation** — Authorization
+
+- **Agent** — Copilot
+
+- **Detection** — XPAi
+
+- **Action** — Safe Outputs
+
+---
+
 # GitHub Actions
 
 GitHub Actions are YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, or issues—no GUI editor needed, unlike Azure DevOps Pipelines.
