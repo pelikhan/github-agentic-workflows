@@ -7,6 +7,8 @@ permissions:
   contents: read
 engine: copilot
 network: defaults
+safe-outputs:
+  add-comment:
 ---
 # Issue Triage
-Summarize issue #${{ github.event.issue.number }} in 3 emojis.
+Summarize issue #${{ github.event.issue.number }} in 3 emojis. Respond in a comment.
