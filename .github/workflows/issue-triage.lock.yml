@@ -139,7 +139,7 @@ jobs:
           mkdir -p $(dirname "$GITHUB_AW_PROMPT")
           cat > $GITHUB_AW_PROMPT << 'EOF'
           # Issue Triage
-          Summarize issue in 3 emojis.
+          Summarize issue #${{ github.event.issue.number }} in 3 emojis.
           
           EOF
       - name: Print prompt to step summary

@@ -8,4 +8,4 @@ engine: copilot
 network: defaults
 ---
 # Issue Triage
-Summarize issue in 3 emojis.
+Summarize issue #${{ github.event.issue.number }} in 3 emojis.
