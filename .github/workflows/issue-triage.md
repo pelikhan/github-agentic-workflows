@@ -2,6 +2,7 @@
 on:
   issues:
     types: [opened, reopened]
+  reaction: "eyes"
 permissions:
   contents: read
 engine: copilot
