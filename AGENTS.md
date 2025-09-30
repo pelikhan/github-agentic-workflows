@@ -62,6 +62,6 @@ Use TypeScript ESM, Node v20, NPM to generate demo code.
   - [GitHub Agentic Workflows](https://github.com/githubnext/gh-aw)   
   - [Continuous AI](https://github.com/githubnext/awesome-continuous-ai)   
   - [Awesome-Continuous-AI](https://github.com/githubnext/awesome-continuous-ai)   
-  - [Demo Time](https://demotime.elio.dev/)   
+  - [Demo Time](https://demotime.elio.dev/llms.txt)   
   - GitHub Actions vs Azure Pipelines   
   - Copilot Agent Mode (GitHub Blog)   
