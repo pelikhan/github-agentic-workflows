@@ -2,7 +2,7 @@
 on:
   workflow_dispatch:
   pull_request:
-    types: [ready_for_review]
+    types: [opened, ready_for_review]
     paths:
       - 'README.md'
 permissions:
