@@ -5,9 +5,9 @@
 
 name: "Accessibility Review for Slides"
 on:
-  push:
-    branches:
-    - main
+  pull_request:
+    types:
+    - ready_for_review
     paths:
     - README.md
   workflow_dispatch: null
