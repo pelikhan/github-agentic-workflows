@@ -126,13 +126,15 @@ SWE agents process untrusted data from multiple sources:
 ```yaml
 --- # GitHub Actions yml ++
 on:
-  issues: [created]
+  issues:
+    types: [opened]
 permissions:
-  issues: read # no writes!
+  contents: read # no writes!
+  actions: read
 safe-outputs:
-  add-labels:
+  add-comment:
 --- # Natural language prompt
-Label current issue.
+Analyze and comment on the current issue.
 ```
 ---
 
@@ -141,19 +143,19 @@ GitHub Action yml is "bytecode"
 
 ```yaml
 jobs:
-  check_permissions:
-    run: check role
+  activation:
+    run: check authorization & sanitize inputs
 
-  agent: needs[check-permissions]
-    permissions: issues: read # no writes!
-    run: copilot "label current issue" --mcp add-labels
+  agent: needs[activation]
+    permissions: contents: read # no writes!
+    run: claude "analyze issue" --tools github
 
   detection: needs[agent]
     run: detect malicious outputs
     permissions: none
 
-  add-labels: needs[detection]
-    run: gh labels add ...
+  add-comment: needs[detection]
+    run: gh issue comment add ...
     permissions: issues: write
 ```
 
@@ -161,16 +163,19 @@ jobs:
 
 # Phases of Agentic Workflows
 
-- **Activation** — Authorization
-  - does this workflow require admin rights?
-- **Agent** — Copilot
-  - Read only permissions
+- **Activation** — Authorization & Sanitization
+  - Authorization checks for required permissions
+  - Sanitize untrusted inputs (@mentions, bot triggers, etc.)
+- **Agent** — AI Engine (Claude/Copilot/Codex)
+  - Read-only permissions
   - Zero secrets
-- **Detection** — XPAi
+  - Network controls
+- **Detection** — Output Validation
   - Secret scanners
-  - Agent-As-Judge
+  - Malicious output detection
 - **Action** — Safe Outputs
-  - Create assets with human review
+  - Create GitHub resources with sanitized data
+  - Separate job with write permissions
 
 ---
 
@@ -183,53 +188,68 @@ on:
   push:
 permissions:
   contents: read    # Agent: minimal permissions only
+  actions: read
 safe-outputs:
   create-issue:     # Separate job handles writes
+    title-prefix: "[ai] "
+    labels: [ai-generated]
   create-pull-request:
-  upload-assets:
+    draft: true
   add-comment:
 ---
 Analyze code changes and create an issue with findings.
 ```
 
-Agent has read-only access. Safe-outputs job creates issues separately.
+Agent has read-only access. Safe-outputs jobs handle GitHub writes separately.
 
 ---
 
 # Agentic Engines
 
-* Anthropic Claude Code
+* Anthropic Claude Code (default)
 * OpenAI Codex (experimental)
-* GitHub Copilot CLI (experimental/issues)
-* YOUR OWN ENGINE
+* GitHub Copilot CLI (experimental)
+* Custom Engine (bring your own)
 
 ```yaml
-engine: claude
-engine: copilot
-  model: gpt5
-engine: custom
-  steps: ...
+engine: claude  # default, sensible defaults
+
+engine:
+  id: claude
+  model: claude-3-5-sonnet-20241022
+  max-turns: 5
+
+engine:
+  id: custom
+  steps:
+    - run: npm test
 ```
 
 ---
 
-# Agent Firewall (_Under construction_)
+# Network Permissions
 
 ```yaml
 ---
 on:
   pull_request:
-permissions: read
+permissions:
+  contents: read
+  actions: read
 network:
   allowed:
     - defaults       # Basic infrastructure
     - node          # NPM ecosystem
+    - python        # PyPI ecosystem
     - "api.github.com"  # Custom domain
 tools:
   web-fetch:
+  web-search:
 ---
 Analyze the PR and fetch documentation from allowed domains only.
 ```
+
+Control network access with ecosystem identifiers or specific domains.
 
 ---
 
@@ -238,18 +258,23 @@ Analyze the PR and fetch documentation from allowed domains only.
 ```yaml
 ---
 on:
-  issues: [opened]
+  issues:
+    types: [opened]
 mcp-servers:
   my-custom-tool:
     command: "node"
     args: ["path/to/mcp-server.js"]
     allowed:
       - custom_function_1
+      - custom_function_2
+tools:
+  github:
+    allowed: [add_issue_comment]
 ---
-Use the custom MCP server tools.
+Use custom MCP server tools alongside built-in GitHub tools.
 ```
 
-**MCP Servers:** Define custom tools and functions that agents can use alongside built-in GitHub tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
+**MCP Servers:** Define custom tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ---
 
@@ -259,13 +284,14 @@ Use the custom MCP server tools.
 mcp-servers:
   fetch:
     container: mcp/fetch
-    network:  # egress squid proxy installed automatically
+    network:  # egress control via squid proxy
       allowed:
         - "example.com"
+        - "*.trusted-domain.com"
     allowed: ["fetch"]
 ```
 
-Trust, but verify.
+Trust, but verify - containerized MCP servers with network restrictions.
 
 ---
 
@@ -274,13 +300,66 @@ Trust, but verify.
 ```sh
 # install the extension
 gh extension install githubnext/gh-aw
-# create a new script
-gh aw add
-# compile and commit
+
+# create a new workflow
+gh aw add my-workflow
+
+# compile workflows to GitHub Actions YAML
 gh aw compile
+
+# view logs and costs
+gh aw logs
 ```
 
 > https://github.com/githubnext/gh-aw/
+
+---
+
+# Cache & Persistent Memory
+
+```yaml
+---
+on:
+  issues:
+    types: [opened]
+cache:
+  key: node-modules-${{ hashFiles('package-lock.json') }}
+  path: node_modules
+  restore-keys: node-modules-
+cache-memory: true  # Persistent memory across runs
+tools:
+  github:
+    allowed: [add_issue_comment]
+---
+Analyze issues with context from previous runs.
+```
+
+**Cache:** Speed up workflows by caching dependencies
+**Cache-Memory:** Persistent MCP memory server across workflow runs
+
+---
+
+# Sanitized Context & Security
+
+```yaml
+---
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+  actions: read
+safe-outputs:
+  add-comment:
+---
+# RECOMMENDED: Use sanitized context text
+Analyze this issue: "${{ needs.activation.outputs.text }}"
+
+Issue number: ${{ github.event.issue.number }}
+Repository: ${{ github.repository }}
+```
+
+**Sanitization:** @mentions neutralized, bot triggers protected, URIs filtered
 
 ---
 
