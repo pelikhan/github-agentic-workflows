@@ -94,16 +94,13 @@ jobs:
 ---
 
 # Security: Cross-Prompt Injection (XPAI)
-## The Hidden Threat to SWE Agents (on your desktop too)
-
-**OWASP Top 10 for LLM Applications - LLM01: Prompt Injection**
+## OWASP Top 10 LLM Apps - LLM01: Prompt Injection
 
 SWE agents process untrusted data from multiple sources:
-- 🔴 **GitHub Issues & Comments** - User-submitted text
-- 🔴 **Pull Request Descriptions** - External contributions  
-- 🔴 **Package Files** - Third-party dependencies (README, docs)
-- 🔴 **Web Pages** - Fetched content from any URL
-- 🔴 **Code Comments** - Malicious directives in code
+- 🔴 **GitHub Issues & Comments** — User-submitted text
+- 🔴 **Pull Request Descriptions** — External contributions  
+- 🔴 **Package Files** — Third-party dependencies
+- 🔴 **Web Pages & Code Comments** — Fetched/embedded content
 
 ---
 
@@ -163,19 +160,10 @@ jobs:
 
 # Phases of Agentic Workflows
 
-- **Activation** — Authorization & Sanitization
-  - Authorization checks for required permissions
-  - Sanitize untrusted inputs (@mentions, bot triggers, etc.)
-- **Agent** — AI Engine (Claude/Copilot/Codex)
-  - Read-only permissions
-  - Zero secrets
-  - Network controls
-- **Detection** — Output Validation
-  - Secret scanners
-  - Malicious output detection
-- **Action** — Safe Outputs
-  - Create GitHub resources with sanitized data
-  - Separate job with write permissions
+- **Activation** — Authorization & input sanitization
+- **Agent** — AI Engine with read-only permissions
+- **Detection** — Output validation & secret scanning
+- **Action** — Safe outputs with write permissions
 
 ---
 
