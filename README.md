@@ -3,7 +3,7 @@ marp: true
 ---
 
 # GitHub Agentic Workflows
-## AI-Powered Automation for Modern Web Development
+## (Research Preview)
 
 Peli de Halleux
 Microsoft Research
@@ -49,20 +49,15 @@ GitHub Actions are event-driven workflows defined in YAML, stored in `.github/wo
 on: # Event triggers
   push:
     branches: [main]
-  pull_request:
 permissions: # Fine-grained access control
   contents: read
 jobs:
   build: # Containerized execution
-    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
       - run: npm ci
       - run: npm run build
-      - run: npm test
 ```
 
 ---
@@ -151,55 +146,41 @@ Web development workflows process untrusted data:
 ---
 
 # GitHub Agentic Workflow
-## Natural language meets GitHub Actions
 
 ```yaml
---- # GitHub Actions YAML with extensions
+--- # GitHub Actions yml ++
 on:
   issues:
     types: [opened]
 permissions:
-  contents: read # Read-only by default
+  contents: read # no writes!
   actions: read
 safe-outputs:
-  add-comment: # Secure write operations
---- 
-# Natural language prompt
-Analyze this issue and add a helpful comment with:
-- Issue type classification
-- Relevant documentation links
-- Suggested next steps
+  add-comment:
+--- # Natural language prompt
+Analyze and comment on the current issue.
 ```
 ---
 
 # Agentic Workflow Compiler
-## From Natural Language to GitHub Actions
+GitHub Action yml is "bytecode"
 
 ```yaml
 jobs:
   activation:
-    # Authorization check & input sanitization
-    run: validate-user && sanitize-inputs
-    
-  agent: 
-    needs: [activation]
-    permissions: 
-      contents: read # Read-only!
-    run: |
-      claude "analyze issue" \
-        --tools github \
-        --network defaults
-        
-  detection: 
-    needs: [agent]
-    permissions: none # No access!
-    run: scan-for-secrets && validate-outputs
-    
-  add-comment: 
-    needs: [detection]
-    permissions: 
-      issues: write # Isolated write
-    run: gh issue comment add "$SAFE_OUTPUT"
+    run: check authorization & sanitize inputs
+
+  agent: needs[activation]
+    permissions: contents: read # no writes!
+    run: claude "analyze issue" --tools github
+
+  detection: needs[agent]
+    run: detect malicious outputs
+    permissions: none
+
+  add-comment: needs[detection]
+    run: gh issue comment add ...
+    permissions: issues: write
 ```
 
 ---
@@ -289,10 +270,8 @@ engine:
 
 engine:
   id: custom
-  steps: # Your own automation
-    - run: npm run lint
+  steps:
     - run: npm test
-    - run: npm run security-audit
 ```
 
 ---
