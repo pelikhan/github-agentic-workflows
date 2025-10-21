@@ -283,6 +283,108 @@ Trust, but verify - containerized MCP servers with network restrictions.
 
 ---
 
+# Model Context Protocol (MCP)
+## Universal standard for connecting AI to external data
+
+- **Open Protocol:** Industry standard for AI-to-tool integration
+- **Extensible:** Create custom servers for any data source or API
+- **Secure:** Built-in authentication, permissions, and sandboxing
+- **Ecosystem:** Growing library of pre-built MCP servers
+
+MCP enables AI agents to safely access databases, APIs, file systems, and more.
+
+> https://modelcontextprotocol.io/
+
+---
+
+# MCP Server Examples
+
+```yaml
+mcp-servers:
+  github:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-github"]
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    allowed: ["create_issue", "list_commits"]
+  
+  memory:
+    command: "npx"
+    args: ["-y", "@modelcontextprotocol/server-memory"]
+    allowed: ["store", "retrieve"]
+```
+
+Pre-built servers: GitHub, GitLab, Google Drive, Slack, Postgres, Puppeteer...
+
+---
+
+# Self-Healing Workflows
+## Agentic workflows that monitor and improve themselves
+
+**Continuous Improvement Loop:**
+1. **Monitor** — AI analyzes workflow execution logs
+2. **Detect** — Identify failures, missing tools, inefficiencies
+3. **Diagnose** — Understand root causes and patterns
+4. **Fix** — Create issues or PRs to resolve problems
+5. **Learn** — Improve over time with persistent memory
+
+Workflows become smarter and more resilient automatically.
+
+---
+
+# Self-Healing Example: Log Scanner
+
+```yaml
+---
+on:
+  schedule:
+    - cron: "0 9 * * *"  # Daily
+safe-outputs:
+  create-issue:
+    title-prefix: "[agentic-logs] "
+    labels: [automation, self-healing]
+---
+# Daily Agentic Workflow Log Scanner
+
+Analyze recent workflow runs and identify:
+- Missing tool errors
+- Configuration problems
+- Permission issues
+- Performance bottlenecks
+
+Create issues with diagnostics and suggested fixes.
+```
+
+Real workflow: [daily-log-scanner](.github/workflows/daily-log-scanner.md)
+
+---
+
+# Workflow Optimization
+
+```yaml
+---
+on:
+  push:
+    paths: ['.github/workflows/*.md']
+safe-outputs:
+  create-pull-request:
+    title-prefix: "[optimize] "
+---
+# Workflow Optimizer
+
+Review workflow configurations for:
+- Unnecessary permissions
+- Missing network restrictions
+- Inefficient tool usage
+- Cost optimization opportunities
+
+Create PRs with performance improvements.
+```
+
+Real workflow: [update-workflow-docs](.github/workflows/update-workflow-docs.md)
+
+---
+
 # Getting started
 
 ```sh
