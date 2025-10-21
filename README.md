@@ -327,6 +327,39 @@ Analyze issues with context from previous runs.
 
 ---
 
+# Playwright + Upload Assets
+## Browser automation with screenshot storage
+
+```yaml
+---
+on:
+  pull_request:
+    types: [ready_for_review]
+permissions:
+  contents: read
+  actions: read
+tools:
+  playwright:     # Browser automation
+  bash:
+safe-outputs:
+  create-issue:
+    title-prefix: "[visual-test] "
+  upload-assets:  # Store screenshots as artifacts
+---
+# Visual Testing Agent
+
+1. Navigate to the application URL
+2. Take screenshots of key pages
+3. Analyze visual changes
+4. Upload screenshots as artifacts
+5. Create issue with findings
+```
+
+**Playwright:** Automate browser interactions (screenshots, testing, scraping)
+**Upload-Assets:** Store files as GitHub workflow artifacts for review
+
+---
+
 # Sanitized Context & Security
 
 ```yaml
