@@ -458,7 +458,8 @@ copilot
 
 | Workflow | Title |
 |----------|-------|
-| [accessibility-review](.github/workflows/accessibility-review.md) | Accessibility Review for Slides 
+| [accessibility-review](.github/workflows/accessibility-review.md) | Accessibility Review for Slides |
+| [daily-activity-report](.github/workflows/daily-activity-report.md) | Daily Repository Activity Report Generator |
 | [daily-log-scanner](.github/workflows/daily-log-scanner.md) | Daily Agentic Workflow Log Scanner |
 | [issue-triage](.github/workflows/issue-triage.md) | Issue Triage |
 | [package-security-check](.github/workflows/package-security-check.md) | Package Security Deep Research |
