@@ -40,6 +40,29 @@ https://github.com/githubnext/gh-aw
 
 ---
 
+# Evolution: LLMs to SWE Agents
+## From code completion to autonomous workflows
+
+**2021: GitHub Copilot** — AI-powered code completion
+- Autocomplete functions, suggest code snippets
+- Context from current file
+
+**2022: ChatGPT** — Conversational AI assistant
+- Interactive problem-solving
+- Code generation from natural language
+
+**2023: GPT-4 & Web Generators** — Advanced reasoning
+- Complex code generation
+- Full applications from prompts
+- Web-based code sandboxes (v0, Claude Artifacts)
+
+**2024: Agent CLIs** — Autonomous coding agents
+- **Claude Code, Codex, Copilot Workspace**
+- Multi-step reasoning and tool use
+- File editing, testing, debugging
+
+---
+
 # CI/CD with GitHub Actions
 ## Configuration as Code
 
