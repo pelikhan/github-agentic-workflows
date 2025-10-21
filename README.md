@@ -56,10 +56,12 @@ https://github.com/githubnext/gh-aw
 - Full applications from prompts
 - Web-based code sandboxes (v0, Claude Artifacts)
 
-**2024: Agent CLIs** — Autonomous coding agents
+**2024: Agent CLIs & Protocols** — Autonomous coding agents
 - **Claude Code, Codex, Copilot Workspace**
 - Multi-step reasoning and tool use
 - File editing, testing, debugging
+- **MCP (Model Context Protocol)** — Standardized tool integration
+- **SKILLS.md** — Agent capability definitions
 
 ---
 
