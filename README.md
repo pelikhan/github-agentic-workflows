@@ -226,7 +226,6 @@ Fetch latest TypeScript docs report findings in a comment.
 ---
 
 # Safe Outputs → Copilot Handoff
-## AI agents orchestrating AI agents
 
 ```yaml
 ---
@@ -237,14 +236,10 @@ safe-outputs:
   create-issue:
     assignees: ["copilot"]
 ---
-Analyze issue and break down into implementation tasks:
-- Create subtasks for @copilot to implement
-- Include technical requirements
-- Suggest file structure changes
-- Recommend test cases
+Analyze issue and break down into implementation tasks
 ```
 
-**Workflow:** Triage agent → Creates tasks → @copilot implements → Review
+> Triage agent → Creates tasks → @copilot implements → Review
 
 ---
 
@@ -268,7 +263,6 @@ engine:
 ---
 
 # MCP Servers Configuration
-## Model Context Protocol for custom tools
 
 ```yaml
 ---
@@ -289,7 +283,6 @@ mcp-servers:
 ---
 
 # Containerized, Firewalled MCPs
-## Sandbox custom tools with network controls
 
 ```yaml
 mcp-servers:
@@ -308,7 +301,8 @@ mcp-servers:
 ---
 
 # Monitoring & Optimization
-## Track costs and performance with `gh aw logs`
+
+Let the agent investigate its own performance.
 
 ```sh
 # Filter by date range
