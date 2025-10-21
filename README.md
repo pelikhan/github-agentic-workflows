@@ -192,6 +192,91 @@ Agent has read-only access. Safe-outputs jobs handle GitHub writes separately.
 
 ---
 
+# Safe Outputs → Copilot Handoff
+## Delegate work from AI agents to GitHub Copilot
+
+Safe outputs can create tasks for GitHub Copilot to complete:
+
+- **create-agent-task** — Create structured tasks for Copilot agents
+- **create-issue** + assign to Copilot — Generate issues and assign to @copilot
+- **create-pull-request** + request review — Create PRs with Copilot review requests
+
+Agent analyzes, Copilot executes. Continuous AI collaboration.
+
+---
+
+# create-agent-task
+## Structured task creation for Copilot agents
+
+```yaml
+---
+on: push
+permissions:
+  contents: read
+  actions: read
+safe-outputs:
+  create-agent-task:
+    agent: copilot
+    labels: [copilot-task, automation]
+---
+Analyze recent changes and create a task for Copilot to:
+1. Add missing unit tests
+2. Update documentation
+3. Optimize performance
+```
+
+Output: Structured task with context for Copilot to execute independently.
+
+---
+
+# create-issue + assign to Copilot
+## AI triage → Copilot resolution
+
+```yaml
+---
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read
+  actions: read
+safe-outputs:
+  create-issue:
+    title-prefix: "[copilot-task] "
+    labels: [needs-implementation]
+    assignees: ["copilot"]
+---
+Analyze issue #${{ github.event.issue.number }} and create 
+implementation tasks for @copilot to resolve.
+```
+
+Workflow: Human reports → AI triages → Copilot implements.
+
+---
+
+# create-pull-request + Copilot review
+## AI generates code → Copilot reviews
+
+```yaml
+---
+on: schedule
+permissions:
+  contents: read
+  actions: read
+safe-outputs:
+  create-pull-request:
+    draft: false
+    reviewers: ["copilot"]
+    labels: [automated-improvement]
+---
+Identify code quality improvements and create a PR.
+Request review from @copilot for validation.
+```
+
+Continuous improvement: AI proposes → Copilot validates → Human merges.
+
+---
+
 # Agentic Engines
 
 * Anthropic Claude Code (default)
