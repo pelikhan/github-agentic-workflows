@@ -17,7 +17,7 @@ https://github.com/githubnext/gh-aw
 ---
 
 # Continuous AI
-## Exploring LLM-powered automation for web development teams
+## LLM-powered automation for modern web development
 
 > https://githubnext.com/projects/continuous-ai/
 
@@ -76,7 +76,7 @@ jobs:
     steps:
       - uses: actions/ai-inference@v1
         with:
-          prompt: 'Analyze and label this issue'
+          prompt: 'Analyze this bug report and add labels'
 ```
 
 **Problem:** Direct AI access to write permissions is dangerous!
@@ -122,11 +122,11 @@ Reducing or isolating any one of these capabilities lowers overall risk.
 ## OWASP Top 10 LLM Apps - LLM01: Prompt Injection
 
 Web development workflows process untrusted data:
-- 🔴 **GitHub Issues & Comments** — User-submitted feature requests
-- 🔴 **Pull Request Descriptions** — External contributions  
-- 🔴 **npm Packages** — Third-party dependencies in package.json
-- 🔴 **API Responses** — External data fetched during builds
-- 🔴 **Web Content** — Documentation, examples, tutorials
+- 🔴 **GitHub Issues & Comments** — User-submitted bug reports
+- 🔴 **Pull Request Descriptions** — External contributor code  
+- 🔴 **npm/yarn Dependencies** — Third-party packages in package.json
+- 🔴 **API Responses** — REST/GraphQL data during builds
+- 🔴 **Web Content** — Documentation from npmjs.com, MDN, Stack Overflow
 
 ---
 
@@ -452,7 +452,7 @@ Review this PR with context from previous reviews:
 ---
 
 # Playwright + Upload Assets
-## Browser automation for visual testing
+## Browser automation for web app testing
 
 ```yaml
 ---
@@ -469,11 +469,11 @@ Test the web application:
 1. Navigate to the deployed preview URL
 2. Take screenshots of key pages
 3. Check for visual regressions
-4. Validate responsive design
+4. Validate responsive design (mobile, tablet, desktop)
 5. Create issue with findings and screenshots
 ```
 
-**Use cases:** Visual regression testing, accessibility audits, E2E validation
+**Use cases:** Visual regression, accessibility audits, E2E validation for SPAs
 
 ---
 
