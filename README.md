@@ -335,24 +335,13 @@ Analyze issues with context from previous runs.
 on:
   pull_request:
     types: [ready_for_review]
-permissions:
-  contents: read
-  actions: read
 tools:
   playwright:     # Browser automation
-  bash:
 safe-outputs:
   create-issue:
-    title-prefix: "[visual-test] "
   upload-assets:  # Store screenshots as artifacts
 ---
-# Visual Testing Agent
-
-1. Navigate to the application URL
-2. Take screenshots of key pages
-3. Analyze visual changes
-4. Upload screenshots as artifacts
-5. Create issue with findings
+Navigate to the application, take screenshots, analyze visual changes, and create an issue with findings.
 ```
 
 **Playwright:** Automate browser interactions (screenshots, testing, scraping)
