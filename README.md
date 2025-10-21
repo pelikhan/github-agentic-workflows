@@ -199,16 +199,10 @@ Agent has read-only access. Safe-outputs jobs handle GitHub writes separately.
 on:
   issues:
     types: [opened]
-permissions:
-  contents: read
-  actions: read
 safe-outputs:
   create-issue:
-    title-prefix: "[copilot] "
-    labels: [automation]
     assignees: ["copilot"]
   create-pull-request:
-    reviewers: ["copilot"]
 ---
 Analyze issue and create tasks for @copilot to implement.
 ```
