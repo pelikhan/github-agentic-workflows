@@ -303,6 +303,38 @@ gh aw logs
 
 ---
 
+# Monitoring & Optimization: `gh aw logs`
+
+```sh
+# Download logs for all agentic workflows
+gh aw logs
+
+# Filter by specific workflow
+gh aw logs weekly-research
+
+# Filter by AI engine type
+gh aw logs --engine claude
+gh aw logs --engine codex
+
+# Filter by date range (absolute dates)
+gh aw logs --start-date 2024-01-01 --end-date 2024-01-31
+
+# Filter by date range (relative delta time)
+gh aw logs --start-date -1w        # Last week's runs
+gh aw logs --start-date -1mo       # Last month's runs
+gh aw logs --start-date -2w3d      # 2 weeks 3 days ago
+
+# Limit number of runs
+gh aw logs -c 10
+
+# Custom output directory
+gh aw logs -o ./workflow-logs
+```
+
+**Track costs, analyze performance, optimize your AI workflows**
+
+---
+
 # Cache & Persistent Memory
 
 ```yaml
