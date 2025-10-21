@@ -192,6 +192,25 @@ Agent has read-only access. Safe-outputs jobs handle GitHub writes separately.
 
 ---
 
+# Safe Outputs → Copilot Handoff
+
+```yaml
+---
+on:
+  issues:
+    types: [opened]
+safe-outputs:
+  create-issue:
+    assignees: ["copilot"]
+  create-pull-request:
+---
+Analyze issue and create tasks for @copilot to implement.
+```
+
+AI agent triages → Safe outputs create issue/PR → @copilot executes.
+
+---
+
 # Agentic Engines
 
 * Anthropic Claude Code (default)
