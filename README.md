@@ -308,24 +308,6 @@ gh aw logs
 ```sh
 # Download logs for all agentic workflows
 gh aw logs
-
-# Filter by specific workflow
-gh aw logs weekly-research
-
-# Filter by AI engine type
-gh aw logs --engine claude
-
-# Filter by date range (relative delta time)
-gh aw logs --end-date -1d          # Up to yesterday
-
-# Limit number of runs
-gh aw logs -c 10
-
-# Inspect MCP servers in workflows
-gh aw mcp inspect workflow-name
-
-# List tools from MCP servers
-gh aw mcp list-tools github weekly-research
 ```
 
 **Track costs, analyze performance, optimize your AI workflows**
