@@ -8,8 +8,8 @@ This repository is for a presentation on **GitHub Agentic Workflows** and **Cont
 - **Agentic Workflows** let developers write GitHub Actions in natural language. The workflow’s “source code” is a markdown description that gets compiled into a YAML Actions workflow by the `gh aw` CLI  .  
 - **Continuous AI** is a broad concept (coined to echo “CI/CD”) for using AI/LLMs to automate ongoing software collaboration tasks (documentation, issue triage, etc.)  .  
 
-Our audience knows **Azure DevOps Pipelines** but is new to GitHub Actions and AI.  
-👉 Explain that **GitHub Actions** are YAML-defined CI workflows (no GUI editor) and each YAML file in `.github/workflows/` triggers on events , analogous to pipeline stages. 
+Our audience is **professional web developers** attending Web Unleashed 2025 conference.  
+👉 They are familiar with modern web development (Node.js, TypeScript, React) and CI/CD concepts. Focus on practical web development automation use cases and how AI agents can streamline their workflows. 
 
 ---
 
