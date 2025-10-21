@@ -3,16 +3,15 @@ marp: true
 ---
 
 # GitHub Agentic Workflows
-## (Research Preview)
+## Research Preview
 
 Peli de Halleux
 Microsoft Research
 
 https://github.com/githubnext/gh-aw
 
-**...The actions have been disabled...**
 
-> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github), Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
+> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (Github Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
 ---
 
@@ -23,26 +22,26 @@ https://github.com/githubnext/gh-aw
 
 ---
 
-# Continous AI
-## CI/CD -> CA
+# CI/CD to Continuous AI
+## Handle all the other stuff developers do...
 
-- Issue triage and labeling.
+- Issue triage and labeling
 
-- Continuous QA.
+- Dependency Updates
 
-- Accessibility review.
+- Accessibility review
 
-- Documentation.
+- Documentation
 
-- Test improvement.
+- Test improvement
 
 - ...
 
 ---
 
-# CI/CD (GitHub Actions)
+# GitHub Actions
 
-GitHub Actions are YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
+YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
 
 ```yaml
 on: #triggers
@@ -72,7 +71,7 @@ permissions:
 jobs:
   ai:
     steps:
-      - uses: actions/ai-inference
+      - uses: actions/ai-inference # AI
         with:
           prompt: 'Label current issue.'
 ```
@@ -93,26 +92,29 @@ jobs:
 
 ---
 
-# Security: Cross-Prompt Injection (XPAI)
-## OWASP Top 10 LLM Apps - LLM01: Prompt Injection
+# Prompt Injection (OWASP Top 10 LLM Apps)
 
 SWE agents process untrusted data from multiple sources:
-- 🔴 **GitHub Issues & Comments** — User-submitted text
-- 🔴 **Pull Request Descriptions** — External contributions  
-- 🔴 **Package Files** — Third-party dependencies
-- 🔴 **Web Pages & Code Comments** — Fetched/embedded content
+
+- **GitHub Issues & Comments** — User-submitted text
+
+- **Pull Request Descriptions** — External contributions  
+
+- **Package Files** — Third-party dependencies
+
+- **Web Pages & Code Comments** — Fetched/embedded content
+
+<!-- Open Worldwide Application Security Project (OWASP)  -->
 
 ---
 
 # GitHub Agentic Workflows
 
+Combine Github Actions and SWE Agents _**safely**_.
+
+- GitHub Actions v1.0
+
 - Natural Language (Markdown is a programming language)
-
-- Automated
-
-- Safe
-
-- Useful
 
 > https://githubnext.com/projects/agentic-workflows/
 
@@ -121,7 +123,8 @@ SWE agents process untrusted data from multiple sources:
 # GitHub Agentic Workflow
 
 ```yaml
---- # GitHub Actions yml ++
+# GitHub Actions (deterministic)
+--- 
 on:
   issues:
     types: [opened]
@@ -130,9 +133,20 @@ permissions:
   actions: read
 safe-outputs:
   add-comment:
---- # Natural language prompt
+# Natural language prompt (AI)
+--- 
 Analyze and comment on the current issue.
 ```
+
+---
+
+# Phases of Agentic Workflows
+
+- **Activation** — Authorization & input sanitization
+- **Agent** — AI Engine with read-only permissions
+- **Detection** — Output validation & secret scanning
+- **Action** — Safe outputs with write permissions
+
 ---
 
 # Agentic Workflow Compiler
@@ -158,15 +172,6 @@ jobs:
 
 ---
 
-# Phases of Agentic Workflows
-
-- **Activation** — Authorization & input sanitization
-- **Agent** — AI Engine with read-only permissions
-- **Detection** — Output validation & secret scanning
-- **Action** — Safe outputs with write permissions
-
----
-
 # Safe Outputs
 ## Deterministic actions on sanitized outputs
 
@@ -179,10 +184,7 @@ permissions:
   actions: read
 safe-outputs:
   create-issue:     # Separate job handles writes
-    title-prefix: "[ai] "
-    labels: [ai-generated]
   create-pull-request:
-    draft: true
   add-comment:
 ---
 Analyze code changes and create an issue with findings.
@@ -202,7 +204,6 @@ on:
 safe-outputs:
   create-issue:
     assignees: ["copilot"]
-  create-pull-request:
 ---
 Analyze issue and create tasks for @copilot to implement.
 ```
@@ -220,16 +221,11 @@ AI agent triages → Safe outputs create issue/PR → @copilot executes.
 
 ```yaml
 engine: claude  # default, sensible defaults
-
-engine:
-  id: claude
-  model: claude-3-5-sonnet-20241022
-  max-turns: 5
-
 engine:
   id: custom
   steps:
-    - run: npm test
+    - run: install agent
+    - run: run agent
 ```
 
 ---
@@ -240,18 +236,12 @@ engine:
 ---
 on:
   pull_request:
-permissions:
-  contents: read
-  actions: read
 network:
   allowed:
-    - defaults       # Basic infrastructure
-    - node          # NPM ecosystem
-    - python        # PyPI ecosystem
-    - "api.github.com"  # Custom domain
+    - defaults  # Basic infrastructure
+    - node      # NPM ecosystem
 tools:
   web-fetch:
-  web-search:
 ---
 Analyze the PR and fetch documentation from allowed domains only.
 ```
@@ -271,14 +261,9 @@ mcp-servers:
   my-custom-tool:
     command: "node"
     args: ["path/to/mcp-server.js"]
-    allowed:
-      - custom_function_1
-      - custom_function_2
-tools:
-  github:
-    allowed: [add_issue_comment]
+    allowed: "*"
 ---
-Use custom MCP server tools alongside built-in GitHub tools.
+...
 ```
 
 **MCP Servers:** Define custom tools through the [Model Context Protocol](https://modelcontextprotocol.io/)
@@ -430,16 +415,3 @@ copilot
 | [pseudo](.github/workflows/pseudo.md) | Pseudo Language Converter |
 | [slidify](.github/workflows/slidify.md) | Slidify - Generate Slide from Issue |
 | [update-workflow-docs](.github/workflows/update-workflow-docs.md) | Agentic Workflow Documentation Updater | 
-
----
-
-# GitHub Agentic Workflows
-## (Research Preview)
-
-Peli de Halleux
-Microsoft Research
-
-https://github.com/githubnext/gh-aw
-
-> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github),
-Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
