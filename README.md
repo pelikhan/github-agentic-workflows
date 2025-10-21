@@ -322,6 +322,17 @@ gh aw logs
 
 ---
 
+# Monitoring & Optimization: `gh aw logs`
+
+```sh
+# Download logs for all agentic workflows
+gh aw logs
+```
+
+**Track costs, analyze performance, optimize your AI workflows**
+
+---
+
 # Cache & Persistent Memory
 
 ```yaml
