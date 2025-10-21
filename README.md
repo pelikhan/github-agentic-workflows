@@ -46,6 +46,11 @@ _building developer tool & experiences_
 - **Issue triage** — Automated labeling and prioritization
 
 > https://githubnext.com/projects/continuous-ai/
+
+<!--
+https://github.com/githubnext/gh-aw/issues/1920
+-->
+
 ---
 
 # Evolution: LLMs to SWE Agents
