@@ -20,6 +20,7 @@ Our audience knows **Azure DevOps Pipelines** but is new to GitHub Actions and A
   - Intro: *What are Agentic Workflows? Why Continuous AI?*  
   - Comparison: GitHub Actions vs Azure Pipelines.  
   - Visual: Natural language → LLM engine → GitHub Action run.  
+  - **Quality Check:** When README.md is modified, screenshots of slides should be generated and reviewed to ensure text fits properly within slide boundaries. If text bleeds out of the image, reduce the content on the slide to maintain readability.  
 
 - **Code Demos:**  
   - Show an Agentic Workflow markdown file (e.g. “Issue Clarifier” or “Documentation Updater”).  
@@ -43,7 +44,8 @@ Use TypeScript ESM, Node v20, NPM to generate demo code.
 ## Rebuilding workflows
 
 - Install the githubnext/gh-aw extension `gh extension install githubnext/gh-aw`
-- run `gh aw compile`
+- Run `gh aw compile` to compile all workflows or `gh aw compile accessibility-review` for a specific workflow
+- The compiled `.lock.yml` files will be generated in `.github/workflows/`
 
 ## Background Research  
 
