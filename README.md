@@ -16,6 +16,21 @@ https://github.com/githubnext/gh-aw
 
 ---
 
+# peli
+
+_building developer tool & experiences_
+
+- Pex - Dynamic Symbolic Test Generatino for .NET
+- TouchDevelop - Code on your phone! (Windows Phone, iPhon 5!)
+- BBC micro:bit - coding on national TV?
+- MakeCode - K12 coding platform (Minecraft/Arcade/micro:bit)
+- GenAIScript - scripting LLMs
+- ...
+
+> linkedin: @pelidehalleux
+
+---
+
 # Continuous AI
 ## LLM-powered automation for software engineering
 
