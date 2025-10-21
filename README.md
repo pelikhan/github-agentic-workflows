@@ -93,6 +93,24 @@ jobs:
 
 ---
 
+# The "Lethal Trifecta" for AI Agents
+## Simon Willison's concept
+
+AI agents become risky when they combine **three capabilities** at once:
+
+| Capability | Description | Example risk |
+|-------------|--------------|---------------|
+| **Private data access** | Reads or queries internal or sensitive data | May expose confidential information |
+| **Untrusted content** | Processes user-supplied or web content | Vulnerable to prompt or data injection |
+| **External communication** | Can send or fetch data over the network | May transmit information outside the system |
+
+**Key idea:** Problems arise when all three are present together.  
+Reducing or isolating any one of these capabilities lowers overall risk.
+
+> https://simonw.substack.com/p/the-lethal-trifecta-for-ai-agents
+
+---
+
 # Security: Cross-Prompt Injection (XPAI)
 ## OWASP Top 10 LLM Apps - LLM01: Prompt Injection
 
