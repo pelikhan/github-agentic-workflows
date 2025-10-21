@@ -40,36 +40,9 @@ https://github.com/githubnext/gh-aw
 
 ---
 
-# Evolution: LLMs to SWE Agents
-## From code completion to autonomous workflows
-
-**2021: GitHub Copilot** — AI-powered code completion
-- Autocomplete functions, suggest code snippets
-- Context from current file
-
-**2022: ChatGPT** — Conversational AI assistant
-- Interactive problem-solving
-- Code generation from natural language
-
-**2023: GPT-4 & Web Generators** — Advanced reasoning
-- Complex code generation
-- Full applications from prompts
-- Web-based code sandboxes (v0, Claude Artifacts)
-
-**2024: Agent CLIs & Protocols** — Autonomous coding agents
-- **Claude Code, Codex, Copilot Workspace**
-- Multi-step reasoning and tool use
-- File editing, testing, debugging
-- **MCP (Model Context Protocol)** — Standardized tool integration
-- **SKILLS.md** — Agent capability definitions
-
----
-
 # CI/CD with GitHub Actions
-## Configuration as Code
-# GitHub Actions
 
-YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
+YAML workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
 
 ```yaml
 on: # Event triggers
@@ -85,6 +58,33 @@ jobs:
       - run: npm ci
       - run: npm run build
 ```
+---
+
+# Evolution: LLMs to SWE Agents
+## From code completion to autonomous workflows
+
+**2021: GitHub Copilot** — AI-powered code completion
+
+**2022: ChatGPT** — Conversational AI assistant
+
+**2023: LLMs & Web UI Generators** — Prompt to Web App
+
+**2024: Agent CLIs** — **Claude Code**
+
+**2025: MCP, SKILLS.md** - Unified tooling
+
+---
+
+# GitHub Agentic Workflows
+## Write automation in natural language
+
+Combine Github Actions and SWE Agents _**safely**_.
+
+- GitHub Actions v1.0
+
+- Natural Language (Markdown is a programming language)
+
+> https://githubnext.com/projects/agentic-workflows/
 
 ---
 
@@ -150,16 +150,12 @@ Web development workflows process untrusted data:
 
 ---
 
-# GitHub Agentic Workflows
-## Write automation in natural language
+# Phases of Agentic Workflows
 
-Combine Github Actions and SWE Agents _**safely**_.
-
-- GitHub Actions v1.0
-
-- Natural Language (Markdown is a programming language)
-
-> https://githubnext.com/projects/agentic-workflows/
+- **Activation** — Authorization & input sanitization
+- **Agent** — AI Engine with read-only permissions
+- **Detection** — Output validation & secret scanning
+- **Action** — Safe outputs with write permissions
 
 ---
 
@@ -181,19 +177,10 @@ safe-outputs:
 Analyze and comment on the current issue.
 ```
 
----
-
-# Phases of Agentic Workflows
-
-- **Activation** — Authorization & input sanitization
-- **Agent** — AI Engine with read-only permissions
-- **Detection** — Output validation & secret scanning
-- **Action** — Safe outputs with write permissions
 
 ---
 
 # Agentic Workflow Compiler
-GitHub Action yml is "bytecode"
 
 ```yaml
 jobs:
@@ -212,31 +199,25 @@ jobs:
     run: gh issue comment add ...
     permissions: issues: write
 ```
+GitHub Action Workflows is a compiler, yaml is the "bytecode"
 
 ---
 
 # Safe Outputs
-## Secure separation of AI and write operations
 
 ```yaml
 ---
 on: 
   pull_request:
     types: [opened]
-permissions:
-  contents: read    # AI agent: read-only
-  actions: read
+permissions: read-all # AI agent: read-only
 safe-outputs:
   create-issue:     # Separate job handles writes
   create-pull-request:
   add-comment:
-    max: 1
 ---
 Analyze PR changes:
-- Check for breaking changes in package.json
-- Review TypeScript types
-- Suggest improvements
-Create an issue summarizing findings.
+Check for breaking changes in package.json and create an issue.
 ```
 
 **Security:** AI can't directly write to GitHub. Safe-outputs validate and execute.
