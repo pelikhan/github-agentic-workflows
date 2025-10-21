@@ -31,13 +31,6 @@ _building developer tool & experiences_
 
 ---
 
-# Continuous AI
-## LLM-powered automation for software engineering
-
-> https://githubnext.com/projects/continuous-ai/
-
----
-
 # Continuous Integration to Continuous AI
 
 - **Accessibility review** — Automated WCAG compliance checks
@@ -125,8 +118,7 @@ AI agents become risky when they combine **three capabilities** at once:
 
 ---
 
-# Safety
-## Defense in Depth
+# Keeping it safe with Agents
 
 - **Containers**: GitHub Actions Jobs
 
