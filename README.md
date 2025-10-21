@@ -3,7 +3,7 @@ marp: true
 ---
 
 # GitHub Agentic Workflows
-## (Research Preview)
+## Research Preview
 
 Peli de Halleux
 Microsoft Research
@@ -12,12 +12,12 @@ https://github.com/githubnext/gh-aw
 
 **Web Unleashed 2025**
 
-> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github), Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
+> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (Github Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
 ---
 
 # Continuous AI
-## Exploring LLM-powered automation for web development teams
+## LLM-powered automation for modern web development
 
 > https://githubnext.com/projects/continuous-ai/
 
@@ -67,8 +67,9 @@ https://github.com/githubnext/gh-aw
 
 # CI/CD with GitHub Actions
 ## Configuration as Code
+# GitHub Actions
 
-GitHub Actions are event-driven workflows defined in YAML, stored in `.github/workflows/`
+YAML-defined CI/CD workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
 
 ```yaml
 on: # Event triggers
@@ -99,9 +100,9 @@ permissions:
 jobs:
   ai-triage:
     steps:
-      - uses: actions/ai-inference@v1
+      - uses: actions/ai-inference # AI
         with:
-          prompt: 'Analyze and label this issue'
+          prompt: 'Analyze this bug report and add labels'
 ```
 
 **Problem:** Direct AI access to write permissions is dangerous!
@@ -147,24 +148,22 @@ Reducing or isolating any one of these capabilities lowers overall risk.
 ## OWASP Top 10 LLM Apps - LLM01: Prompt Injection
 
 Web development workflows process untrusted data:
-- 🔴 **GitHub Issues & Comments** — User-submitted feature requests
-- 🔴 **Pull Request Descriptions** — External contributions  
-- 🔴 **npm Packages** — Third-party dependencies in package.json
-- 🔴 **API Responses** — External data fetched during builds
-- 🔴 **Web Content** — Documentation, examples, tutorials
+- 🔴 **GitHub Issues & Comments** — User-submitted bug reports
+- 🔴 **Pull Request Descriptions** — External contributor code  
+- 🔴 **npm/yarn Dependencies** — Third-party packages in package.json
+- 🔴 **API Responses** — REST/GraphQL data during builds
+- 🔴 **Web Content** — Documentation from npmjs.com, MDN, Stack Overflow
 
 ---
 
 # GitHub Agentic Workflows
 ## Write automation in natural language
 
-- **Natural Language** — Markdown is a programming language
+Combine Github Actions and SWE Agents _**safely**_.
 
-- **Automated** — Triggered by GitHub events
+- GitHub Actions v1.0
 
-- **Safe** — Sandboxed execution with security controls
-
-- **Useful** — Real-world web development automation
+- Natural Language (Markdown is a programming language)
 
 > https://githubnext.com/projects/agentic-workflows/
 
@@ -173,7 +172,8 @@ Web development workflows process untrusted data:
 # GitHub Agentic Workflow
 
 ```yaml
---- # GitHub Actions yml ++
+# GitHub Actions (deterministic)
+--- 
 on:
   issues:
     types: [opened]
@@ -182,9 +182,20 @@ permissions:
   actions: read
 safe-outputs:
   add-comment:
---- # Natural language prompt
+# Natural language prompt (AI)
+--- 
 Analyze and comment on the current issue.
 ```
+
+---
+
+# Phases of Agentic Workflows
+
+- **Activation** — Authorization & input sanitization
+- **Agent** — AI Engine with read-only permissions
+- **Detection** — Output validation & secret scanning
+- **Action** — Safe outputs with write permissions
+
 ---
 
 # Agentic Workflow Compiler
@@ -210,15 +221,6 @@ jobs:
 
 ---
 
-# Phases of Agentic Workflows
-
-- **Activation** — Authorization & input sanitization
-- **Agent** — AI Engine with read-only permissions
-- **Detection** — Output validation & secret scanning
-- **Action** — Safe outputs with write permissions
-
----
-
 # Safe Outputs
 ## Secure separation of AI and write operations
 
@@ -231,12 +233,8 @@ permissions:
   contents: read    # AI agent: read-only
   actions: read
 safe-outputs:
-  create-issue:     # Separate job with controlled writes
-    title-prefix: "[automated] "
-    labels: [ai-generated, needs-review]
+  create-issue:     # Separate job handles writes
   create-pull-request:
-    draft: true
-    labels: [bot]
   add-comment:
     max: 1
 ---
@@ -262,9 +260,6 @@ on:
 safe-outputs:
   create-issue:
     assignees: ["copilot"]
-    labels: [copilot-task]
-  create-pull-request:
-    draft: true
 ---
 Analyze issue and break down into implementation tasks:
 - Create subtasks for @copilot to implement
@@ -286,17 +281,12 @@ Analyze issue and break down into implementation tasks:
 * **Custom Engine** (bring your own AI)
 
 ```yaml
-engine: claude  # Default with sensible presets
-
-engine:
-  id: claude
-  model: claude-3-5-sonnet-20241022
-  max-turns: 5 # Limit iterations
-
+engine: claude  # default, sensible defaults
 engine:
   id: custom
   steps:
-    - run: npm test
+    - run: install agent
+    - run: run agent
 ```
 
 ---
@@ -308,19 +298,12 @@ engine:
 ---
 on:
   pull_request:
-permissions:
-  contents: read
-  actions: read
 network:
   allowed:
-    - defaults        # Basic infrastructure
-    - node           # npm, yarn, pnpm
-    - python         # pip (for build tools)
-    - "api.github.com"
-    - "*.myapi.com"  # Your backend
+    - defaults  # Basic infrastructure
+    - node      # NPM ecosystem
 tools:
-  web-fetch:         # Fetch documentation
-  web-search:        # Search for solutions
+  web-fetch:
 ---
 Review this PR:
 - Fetch latest TypeScript docs
@@ -342,21 +325,10 @@ on:
 mcp-servers:
   bundle-analyzer:           # Custom tool
     command: "node"
-    args: ["./tools/bundle-mcp.js"]
-    allowed:
-      - analyze_bundle_size
-      - check_dependencies
-  lighthouse:                # Performance audits
-    command: "npx"
-    args: ["lighthouse-mcp"]
-    allowed:
-      - run_audit
-tools:
-  github:
-    allowed: [add_issue_comment]
+    args: ["path/to/mcp-server.js"]
+    allowed: "*"
 ---
-Analyze web performance and bundle size for this issue.
-Report findings using custom MCP tools.
+...
 ```
 
 **MCP:** Extend AI capabilities with [Model Context Protocol](https://modelcontextprotocol.io/)
@@ -477,7 +449,7 @@ Review this PR with context from previous reviews:
 ---
 
 # Playwright + Upload Assets
-## Browser automation for visual testing
+## Browser automation for web app testing
 
 ```yaml
 ---
@@ -494,11 +466,11 @@ Test the web application:
 1. Navigate to the deployed preview URL
 2. Take screenshots of key pages
 3. Check for visual regressions
-4. Validate responsive design
+4. Validate responsive design (mobile, tablet, desktop)
 5. Create issue with findings and screenshots
 ```
 
-**Use cases:** Visual regression testing, accessibility audits, E2E validation
+**Use cases:** Visual regression, accessibility audits, E2E validation for SPAs
 
 ---
 
@@ -566,18 +538,3 @@ Create an agentic workflow that reviews PRs for:
 | [pseudo](.github/workflows/pseudo.md) | Pseudo Language Converter |
 | [slidify](.github/workflows/slidify.md) | Slidify - Generate Slide from Issue |
 | [update-workflow-docs](.github/workflows/update-workflow-docs.md) | Agentic Workflow Documentation Updater | 
-
----
-
-# GitHub Agentic Workflows
-## AI-Powered Automation for Modern Web Development
-
-Peli de Halleux
-Microsoft Research
-
-https://github.com/githubnext/gh-aw
-
-**Web Unleashed 2025**
-
-> in collaboration with Edward Aftandilian (GitHub), Peli de Halleux, Russell Horton (GitHub), Don Syme (Github),
-Krzysztof Cieślak (GitHub), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
