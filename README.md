@@ -302,6 +302,23 @@ Trust, but verify - containerized MCP servers with network restrictions.
 
 ---
 
+# Sandboxing: Defense in Depth
+
+**GitHub Actions: Containerized Execution**
+- Each workflow runs in isolated containers
+- Ephemeral environments destroyed after execution
+
+**Firewalls: Network Control**
+- MCP servers run with egress filtering
+- Agents restricted to approved domains only
+
+**Zero Trust: Minimal Permissions**
+- Read-only permissions by default
+- No secrets exposed to AI agents
+- Write operations through safe-outputs only
+
+---
+
 # Getting started
 
 ```sh
