@@ -314,21 +314,18 @@ gh aw logs weekly-research
 
 # Filter by AI engine type
 gh aw logs --engine claude
-gh aw logs --engine codex
-
-# Filter by date range (absolute dates)
-gh aw logs --start-date 2024-01-01 --end-date 2024-01-31
 
 # Filter by date range (relative delta time)
-gh aw logs --start-date -1w        # Last week's runs
-gh aw logs --start-date -1mo       # Last month's runs
-gh aw logs --start-date -2w3d      # 2 weeks 3 days ago
+gh aw logs --end-date -1d          # Up to yesterday
 
 # Limit number of runs
 gh aw logs -c 10
 
-# Custom output directory
-gh aw logs -o ./workflow-logs
+# Inspect MCP servers in workflows
+gh aw mcp inspect workflow-name
+
+# List tools from MCP servers
+gh aw mcp list-tools github weekly-research
 ```
 
 **Track costs, analyze performance, optimize your AI workflows**
