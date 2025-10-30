@@ -246,18 +246,11 @@ Analyze issue and break down into implementation tasks
 # AI Engines
 ## Multiple AI providers supported
 
-* **Anthropic Claude Code** (default, recommended)
-* **OpenAI Codex** (experimental)
-* **GitHub Copilot CLI** (experimental)
+* **Claude Code** (default) • **Codex** (exp.) • **Copilot CLI** (exp.)
 * **Custom Engine** (bring your own AI)
 
 ```yaml
-engine: claude  # default, sensible defaults
-engine:
-  id: custom
-  steps:
-    - run: install agent
-    - run: run agent
+engine: claude  # sensible defaults
 ```
 
 ---
@@ -265,20 +258,14 @@ engine:
 # MCP Servers Configuration
 
 ```yaml
----
-on:
-  issues:
-    types: [opened]
 mcp-servers:
-  bundle-analyzer:           # Custom tool
+  bundle-analyzer:
     command: "node"
     args: ["path/to/mcp-server.js"]
     allowed: "*"
----
-...
 ```
 
-**MCP:** Extend AI capabilities with [Model Context Protocol](https://modelcontextprotocol.io/)
+**MCP:** Extend AI with [Model Context Protocol](https://modelcontextprotocol.io/)
 
 ---
 
@@ -288,15 +275,12 @@ mcp-servers:
 mcp-servers:
   web-scraper:
     container: mcp/fetch
-    network:  # Squid proxy for egress filtering
-      allowed:
-        - "npmjs.com"
-        - "*.jsdelivr.com"
-        - "unpkg.com"
+    network:
+      allowed: ["npmjs.com", "*.jsdelivr.com"]
     allowed: ["fetch"]
 ```
 
-**Defense in depth:** Containerization + network filtering + permission controls
+**Defense in depth:** Container + network + permissions
 
 ---
 
