@@ -10,7 +10,6 @@ Microsoft Research
 
 https://github.com/githubnext/gh-aw
 
-**Web Unleashed 2025**
 
 > in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (Github Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
