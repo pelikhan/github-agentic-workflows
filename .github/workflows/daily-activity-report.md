@@ -6,17 +6,13 @@ on:
 permissions:
   contents: read
   actions: read
-engine: claude
+  issues: read
+  pull-requests: read
 tools:
   github:
-    allowed:
-      - list_commits
-      - list_issues
-      - list_pull_requests
-      - search_issues
-      - search_pull_requests
-      - get_repository
-      - list_workflow_runs
+    toolsets:
+      - default
+      - actions
 safe-outputs:
   create-issue:
     title-prefix: "📊 Daily Activity Report - "

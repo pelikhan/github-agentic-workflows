@@ -6,7 +6,8 @@ on:
 permissions:
   actions: read
   contents: read
-engine: claude
+  issues: read
+  pull-requests: read
 network: defaults
 tools:
   github:

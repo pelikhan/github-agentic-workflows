@@ -8,7 +8,8 @@ on:
 permissions:
   contents: read
   actions: read
-engine: claude
+  issues: read
+  pull-requests: read
 tools:
   playwright:
   bash:

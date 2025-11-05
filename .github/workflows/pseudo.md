@@ -4,8 +4,9 @@ on:
     name: pseudo
   reaction: "rocket"
 permissions:
+  contents: read
   issues: read
-engine: claude
+  pull-requests: read
 network: defaults
 tools:
   github:

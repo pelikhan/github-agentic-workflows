@@ -8,7 +8,7 @@ permissions:
   contents: read
   pull-requests: read
   actions: read
-engine: claude
+  issues: read
 network:
   allowed:
     - node

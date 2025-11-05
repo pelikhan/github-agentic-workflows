@@ -4,8 +4,9 @@ on:
     types: [opened, reopened]
   reaction: "eyes"
 permissions:
+  contents: read
   issues: read
-engine: claude
+  pull-requests: read
 network: defaults
 tools:
   github:
