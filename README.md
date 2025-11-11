@@ -92,11 +92,16 @@ jobs:
 Combine Github Actions and SWE Agents.
 
 ```yaml
---- # GitHub Actions yaml
-on: issues: types: [opened]
-permissions: issue: write # danger
---- # Agent prompt
-Summarize the current issue.
+---
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read  # AI agent: read-only
+safe-outputs:
+  add-comment:    # Separate job handles writes
+---
+Summarize issue and respond in a comment.
 ```
 
 > https://githubnext.com/projects/agentic-workflows/
@@ -172,9 +177,9 @@ jobs:
 
   agent: needs[activation] # new container
     permissions: contents: read # no writes!
-    run: claude "analyze issue" --tools github
+    run: claude "Summarize issue and respond" --tools github
 
-  detection: needs[agent] #  new container
+  detection: needs[agent] # new container
     run: detect malicious outputs
     permissions: none
 
