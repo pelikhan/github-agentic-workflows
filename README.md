@@ -15,7 +15,7 @@ https://github.com/githubnext/gh-aw
 
 ---
 
-# peli
+# Peli
 
 _building developer tool & experiences_
 
@@ -24,7 +24,7 @@ _building developer tool & experiences_
 - BBC micro:bit - coding on national TV?
 - MakeCode - K12 coding platform (Minecraft/Arcade/micro:bit)
 - GenAIScript - scripting LLMs
-- ...
+- GitHub Agentic Workflows - ...
 
 > linkedin: @pelidehalleux
 
@@ -72,42 +72,18 @@ https://github.com/githubnext/gh-aw/issues/1920
 YAML workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
 
 ```yaml
-on: # Event triggers
-  push:
-    branches: [main]
-permissions: # Fine-grained access control
-  contents: read
-jobs:
-  build: # Containerized execution
-    steps:
-      - uses: actions/checkout@v4 
-      - uses: actions/setup-node@v4
-      - run: npm test # deterministic code
-```
-
----
-
-# GitHub Agentic Workflows
-
-Combine Github Actions and SWE Agents.
-
-```yaml
----
 on:
   issues:
     types: [opened]
 permissions:
-  contents: read  # AI agent: read-only
-safe-outputs:
-  add-comment:    # Separate job handles writes
----
-Summarize issue and respond in a comment.
+  issues: write
+jobs:
+  agent:
+    steps:
+      - run: copilot "Summarize issue and respond in a comment."
 ```
 
-> https://githubnext.com/projects/agentic-workflows/
-
 ---
-
 
 # The "Lethal Trifecta" for AI Agents
 
@@ -127,24 +103,34 @@ AI agents become risky when they combine **three capabilities** at once:
 
 ---
 
-# Keeping it safe with Agents
+# Loved by Developers
+
+```yaml
+--- # deterministic: GitHub Action YAML + Agentic addons
+on:
+  issues:
+    types: [opened]
+permissions:
+  contents: read  # AI agent: read-only
+safe-outputs:
+  add-comment:    # Separate job handles writes
+--- # Agent prompt starts here
+Summarize issue and respond in a comment.
+```
+
+> https://githubnext.com/projects/agentic-workflows/
+
+---
+
+# Trusted by Enterprises
 
 - **Containers**: GitHub Actions Jobs
 
 - **Firewalls**: Network Control
 
-- **Zero Trust**: Minimal Permissions
+- **Zero Trust**: Minimal Permissions / Zero Secrets
 
 - **Plan / Check / Act**: LLM judge, Human in the loop
-
----
-
-# Plan / Check / Act for Agents
-
-- **Activation** — Authorization & input sanitization
-- **Agent** — AI Engine with read-only permissions
-- **Detection** — Output validation & secret scanning
-- **Action** — Safe outputs with write permissions
 
 ---
 
@@ -155,11 +141,10 @@ AI agents become risky when they combine **three capabilities** at once:
 on: 
   pull_request:
     types: [opened]
-permissions: read-all # AI agent: read-only
+permissions: 
+  contents: read
 safe-outputs:
-  create-issue:     # Separate job handles writes
-  create-pull-request:
-  add-comment:
+  create-issue:
 ---
 Check for breaking changes in package.json and create an issue.
 ```
@@ -168,7 +153,7 @@ Check for breaking changes in package.json and create an issue.
 
 ---
 
-# Agentic Workflow Compiler
+# Compiled Action Yaml
 
 ```yaml
 jobs:
@@ -177,7 +162,7 @@ jobs:
 
   agent: needs[activation] # new container
     permissions: contents: read # no writes!
-    run: claude "Summarize issue and respond" --tools github
+    run: copilot "Check for breaking changes in package.json..."
 
   detection: needs[agent] # new container
     run: detect malicious outputs
@@ -189,23 +174,6 @@ jobs:
 ```
 
 > GitHub Action Workflows is a compiler, yaml is the "bytecode"
-
----
-
-# Getting Started (Agentically)
-
-```sh
-# install github actions workflow
-gh extension install githubnext/gh-aw
-gh aw init
-# install copilot cli
-npm install -g github/copilot
-copilot
-
-> /create-agentic-workflow
-```
-
-> Designed to be built with Agents from day 0.
 
 ---
 
@@ -226,6 +194,23 @@ Fetch latest TypeScript docs report findings in a comment.
 ```
 
 > Control external access for security
+
+---
+
+# Getting Started (Agentically)
+
+```sh
+# install github actions workflow
+gh extension install githubnext/gh-aw
+gh aw init
+# install copilot cli
+npm install -g github/copilot
+copilot
+
+> /create-agentic-workflow
+```
+
+> Designed to be built with Agents from day 0.
 
 ---
 
