@@ -106,15 +106,15 @@ AI agents become risky when they combine **three capabilities** at once:
 # Loved by Developers
 
 ```yaml
---- # deterministic: GitHub Action YAML + Agentic addons
+---
 on:
   issues:
     types: [opened]
 permissions:
-  contents: read  # AI agent: read-only
+  issues: read
 safe-outputs:
-  add-comment:    # Separate job handles writes
---- # Agent prompt starts here
+  add-comment:
+---
 Summarize issue and respond in a comment.
 ```
 
@@ -123,14 +123,19 @@ Summarize issue and respond in a comment.
 ---
 
 # Trusted by Enterprises
+## Safe by default
 
 - **Containers**: GitHub Actions Jobs
 
 - **Firewalls**: Network Control
 
-- **Zero Trust**: Minimal Permissions / Zero Secrets
+- **Zero Secrets**: Minimal Permissions / Zero Secrets
 
-- **Plan / Check / Act**: LLM judge, Human in the loop
+- **Threat Detection**: Agentic detection of threats
+
+- **Safe Outputs**: Determinsitic, guardrailed outputs
+
+- **Plan / Check / Act**: Human in the loop
 
 ---
 
