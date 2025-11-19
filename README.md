@@ -3,7 +3,8 @@ marp: true
 ---
 
 # GitHub Agentic Workflows
-## Research Preview
+## Safe Specification Driven Automation
+### Research Preview
 
 Peli de Halleux
 Microsoft Research
