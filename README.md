@@ -11,7 +11,7 @@ Microsoft Research
 https://github.com/githubnext/gh-aw
 
 
-> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (Github Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
+> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (GitHub Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft)
 
 ---
 
@@ -19,8 +19,8 @@ https://github.com/githubnext/gh-aw
 
 _building developer tool & experiences_
 
-- Pex - Dynamic Symbolic Test Generatino for .NET
-- TouchDevelop - Code on your phone! (Windows Phone, iPhon 5!)
+- Pex - Dynamic Symbolic Test Generation for .NET
+- TouchDevelop - Code on your phone! (Windows Phone, iPhone 5!)
 - BBC micro:bit - coding on national TV?
 - MakeCode - K12 coding platform (Minecraft/Arcade/micro:bit)
 - GenAIScript - scripting LLMs
@@ -76,7 +76,7 @@ on:
   issues:
     types: [opened]
 permissions:
-  issues: write
+  issues: write # danger zone
 jobs:
   agent:
     steps:
@@ -129,11 +129,11 @@ Summarize issue and respond in a comment.
 
 - **Firewalls**: Network Control
 
-- **Zero Secrets**: Minimal Permissions / Zero Secrets
+- **Zero Secrets**: Minimal Permissions / MCP Proxy / Zero Secrets
 
 - **Threat Detection**: Agentic detection of threats
 
-- **Safe Outputs**: Determinsitic, guardrailed outputs
+- **Safe Outputs**: Deterministic, guardrailed outputs
 
 - **Plan / Check / Act**: Human in the loop
 
