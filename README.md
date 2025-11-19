@@ -112,11 +112,13 @@ on:
   issues:
     types: [opened]
 permissions:
-  issues: read
+  issues: read # restriced permissions
 safe-outputs:
-  add-comment:
+  add-comment: # guardrails
 ---
 Summarize issue and respond in a comment.
+description:
+${{ needs.activation.outputs.text }} # sanitized
 ```
 
 > https://githubnext.com/projects/agentic-workflows/
@@ -137,25 +139,6 @@ Summarize issue and respond in a comment.
 - **Safe Outputs**: Deterministic, guardrailed outputs
 
 - **Plan / Check / Act**: Human in the loop
-
----
-
-# Safe Outputs
-
-```yaml
----
-on: 
-  pull_request:
-    types: [opened]
-permissions: 
-  contents: read
-safe-outputs:
-  create-issue:
----
-Check for breaking changes in package.json and create an issue.
-```
-
-**Security:** AI can't directly write to GitHub. Safe-outputs validate and execute.
 
 ---
 
@@ -180,6 +163,25 @@ jobs:
 ```
 
 > GitHub Action Workflows is a compiler, yaml is the "bytecode"
+
+---
+
+# Safe Outputs
+
+```yaml
+---
+on: 
+  pull_request:
+    types: [opened]
+permissions: 
+  contents: read
+safe-outputs:
+  create-issue:
+---
+Check for breaking changes in package.json and create an issue.
+```
+
+**Security:** AI can't directly write to GitHub. Safe-outputs validate and execute.
 
 ---
 
