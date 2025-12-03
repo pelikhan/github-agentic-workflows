@@ -17,7 +17,7 @@ safe-outputs:
   create-issue:
     title-prefix: "📊 Daily Activity Report - "
     labels: [report, automation, daily-stats]
-timeout_minutes: 15
+timeout-minutes: 15
 ---
 
 # Daily Repository Activity Report Generator

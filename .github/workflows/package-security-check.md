@@ -26,7 +26,7 @@ tools:
 safe-outputs:
   add-comment:
     max: 1
-timeout_minutes: 15
+timeout-minutes: 15
 ---
 
 # Package Security Deep Research
