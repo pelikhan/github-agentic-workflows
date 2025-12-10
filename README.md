@@ -3,7 +3,7 @@ marp: true
 ---
 
 # GitHub Agentic Workflows
-## Safe Specification Driven Automation
+## Write AI Automation in Natural Language
 ### Research Preview
 
 Peli de Halleux
@@ -70,7 +70,7 @@ https://github.com/githubnext/gh-aw/issues/1920
 
 # CI/CD with GitHub Actions
 
-YAML workflows stored in `.github/workflows/` that trigger on events like push, pull requests, configuration as code.
+YAML workflows stored in `.github/workflows/` that trigger on events like push, pull requests, issues.
 
 ```yaml
 on:
@@ -112,16 +112,14 @@ on:
   issues:
     types: [opened]
 permissions:
-  issues: read # restriced permissions
+  contents: read # read-only by default
 safe-outputs:
-  add-comment: # guardrails
+  add-comment: # guardrails for write operations
 ---
 Summarize issue and respond in a comment.
-description:
-${{ needs.activation.outputs.text }} # sanitized
 ```
 
-> https://githubnext.com/projects/agentic-workflows/
+> Natural language → compiled to GitHub Actions YAML
 
 ---
 
@@ -149,20 +147,20 @@ jobs:
   activation:
     run: check authorization & sanitize inputs
 
-  agent: needs[activation] # new container
-    permissions: contents: read # no writes!
-    run: copilot "Check for breaking changes in package.json..."
+  agent: needs[activation] # isolated container
+    permissions: contents: read # read-only!
+    run: copilot "Analyze package.json for breaking changes..."
 
   detection: needs[agent] # new container
     run: detect malicious outputs
     permissions: none
 
-  add-comment: needs[detection] # new container
+  add-comment: needs[detection] # isolated container
     run: gh issue comment add ...
     permissions: issues: write
 ```
 
-> GitHub Action Workflows is a compiler, yaml is the "bytecode"
+> Markdown workflows compiled to GitHub Actions YAML for auditability
 
 ---
 
@@ -181,7 +179,7 @@ safe-outputs:
 Check for breaking changes in package.json and create an issue.
 ```
 
-**Security:** AI can't directly write to GitHub. Safe-outputs validate and execute.
+**Security:** AI agents cannot directly write to GitHub. Safe-outputs validate AI responses and execute actions in isolated containers.
 
 ---
 
@@ -208,17 +206,20 @@ Fetch latest TypeScript docs report findings in a comment.
 # Getting Started (Agentically)
 
 ```sh
-# install github actions workflow
+# Install GitHub Agentic Workflows extension
 gh extension install githubnext/gh-aw
 gh aw init
-# install copilot cli
-npm install -g github/copilot
+
+# Install Copilot CLI (optional)
+npm install -g @github/copilot
 copilot
 
-> /create-agentic-workflow
+> load https://raw.githubusercontent.com/githubnext/gh-aw/main/.github/prompts/create-agentic-workflow.prompt.md
 ```
 
-> Designed to be built with Agents from day 0.
+> Built with AI agents in mind from day 0
+
+> Quick Start: https://githubnext.github.io/gh-aw/setup/quick-start/
 
 ---
 
@@ -243,12 +244,16 @@ Analyze issue and break down into implementation tasks
 # AI Engines
 ## Multiple AI providers supported
 
-* **Claude Code** (default) • **Codex** (exp.) • **Copilot CLI** (exp.)
+* **Claude Code** (default, recommended)
+* **Codex** (experimental)
+* **Copilot CLI** (experimental)
 * **Custom Engine** (bring your own AI)
 
 ```yaml
 engine: claude  # sensible defaults
 ```
+
+> Claude Code offers the best reliability and performance
 
 ---
 
@@ -263,6 +268,8 @@ mcp-servers:
 ```
 
 **MCP:** Extend AI with [Model Context Protocol](https://modelcontextprotocol.io/)
+
+**Managed endpoint:** https://api.githubcopilot.com/mcp/ with OAuth authentication
 
 ---
 
@@ -283,12 +290,20 @@ mcp-servers:
 
 # Monitoring & Optimization
 
-Let the agent investigate its own performance.
+Track workflow performance and AI agent behavior.
 
 ```sh
+# View recent runs
+gh aw logs
+
 # Filter by date range
 gh aw logs --start-date -1w accessibility-review
+
+# Compile workflows
+gh aw compile
 ```
+
+> Lock files (`.lock.yml`) ensure reproducibility and auditability
 
 ---
 
@@ -379,7 +394,7 @@ Generate a workflow interactively:
 copilot
 ```
 
-Then in the Copilot CLI:
+Then load the workflow creation prompt:
 ```
 load https://raw.githubusercontent.com/githubnext/gh-aw/main/.github/prompts/create-agentic-workflow.prompt.md
 
@@ -390,6 +405,8 @@ Create an agentic workflow that reviews PRs for:
 ```
 
 **Meta-automation:** Use AI to create AI workflows!
+
+> Docs: https://githubnext.github.io/gh-aw/
 
 ---
 
