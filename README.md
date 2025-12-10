@@ -70,7 +70,7 @@ https://github.com/githubnext/gh-aw/issues/1920
 
 # CI/CD with GitHub Actions
 
-YAML workflows stored in `.github/workflows/` that trigger on events like push, pull requests, issues.
+YAML workflows as configuration stored in `.github/workflows/` that trigger on events like push, pull requests, issues.
 
 ```yaml
 on:
