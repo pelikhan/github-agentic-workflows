@@ -126,11 +126,13 @@ Summarize issue and respond in a comment.
 # Trusted by Enterprises
 ## Safe by default
 
-- **Containers**: GitHub Actions Jobs
+- **Containers**: Isolated GitHub Actions Jobs
 
 - **Firewalls**: Network Control
 
-- **Zero Secrets**: Minimal Permissions / MCP Proxy / Zero Secrets
+- **Minimal Permissions**: Read-only by default
+
+- **MCP Proxy**: Secure tool access
 
 - **Threat Detection**: Agentic detection of threats
 
