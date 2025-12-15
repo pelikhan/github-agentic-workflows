@@ -12,7 +12,7 @@ Microsoft Research
 https://github.com/githubnext/gh-aw
 
 
-> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (GitHub Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft), Mara Kiefer (GitHub), Landon Cox (Microsoft Research), Pedro Henrique Penna (Microsoft Research)
+> in collaboration with Edward Aftandilian (GitHub Next), Russell Horton (GitHub Next), Don Syme (GitHub Next), Krzysztof Cieślak (GitHub Next), Ben De St Paer-Gotch (GitHub), Jiaxiao Zhou (Microsoft), Mara Kiefer (GitHub Next), Landon Cox (Microsoft Research), Pedro Henrique Penna (Microsoft Research)
 
 ---
 
